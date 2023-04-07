@@ -16,6 +16,7 @@ final class ApplicationFlowRouter {
     
     func start() {
         let trackersViewController = TrackersViewController()
+        trackersViewController.router = self
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
         trackersNavigationController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(named: "TrackerTabIcon"), tag: 0)
         trackersNavigationController.navigationBar.prefersLargeTitles = true
@@ -28,5 +29,20 @@ final class ApplicationFlowRouter {
         let tabBarController = TabBarController()
         tabBarController.viewControllers = [trackersNavigationController, statisticsNavigationController]
         self.window.rootViewController = tabBarController
+    }
+    
+    func createNewTrack(parentVC: UIViewController) {
+        let createTrackerTypeViewController = CreateTrackerTypeViewController()
+        let createNewTrackNavigationViewController = UINavigationController()
+        
+        let createNewTrackNavigationBarAppearence = UINavigationBarAppearance()
+        createNewTrackNavigationBarAppearence.configureWithOpaqueBackground()
+        createNewTrackNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        createNewTrackNavigationBarAppearence.shadowColor = nil
+        createNewTrackNavigationBarAppearence.shadowImage = nil
+        createNewTrackNavigationViewController.navigationBar.standardAppearance = createNewTrackNavigationBarAppearence
+        
+        parentVC.present(createNewTrackNavigationViewController, animated: true)
+        createNewTrackNavigationViewController.pushViewController(createTrackerTypeViewController, animated: true)
     }
 }

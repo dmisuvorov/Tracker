@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		625A20A129E0AF4900B6F79B /* CreateTrackerTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */; };
 		62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */; };
 		62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */; };
 		62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECD8F229D5C489008956CE /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerTypeViewController.swift; sourceTree = "<group>"; };
 		62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		62ECD8EF29D5C489008956CE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		625A209F29E0AF2600B6F79B /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
 		62ECD8E629D5C489008956CE = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +125,7 @@
 		62ECD90F29D78EEB008956CE /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
+				625A209F29E0AF2600B6F79B /* Create */,
 				62ECD91329D78F1E008956CE /* TrackersViewController.swift */,
 			);
 			path = Trackers;
@@ -211,6 +222,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				62ECD91929DCC202008956CE /* Day.swift in Sources */,
+				625A20A129E0AF4900B6F79B /* CreateTrackerTypeViewController.swift in Sources */,
 				62ECD8F729D5C489008956CE /* ViewController.swift in Sources */,
 				62ECD90829D7809A008956CE /* TabBarController.swift in Sources */,
 				62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */,

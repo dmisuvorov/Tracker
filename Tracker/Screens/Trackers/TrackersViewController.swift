@@ -8,6 +8,7 @@
 import UIKit
 
 final class TrackersViewController : UIViewController {
+    var router: ApplicationFlowRouter? = nil
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: Set<TrackerRecord> = []
@@ -78,7 +79,7 @@ final class TrackersViewController : UIViewController {
     }
     
     @objc private func onAddButtonClick() {
-        
+        router?.createNewTrack(parentVC: self)
     }
     
     private func configureUI() {
