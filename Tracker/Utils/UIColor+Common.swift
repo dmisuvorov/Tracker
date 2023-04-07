@@ -8,6 +8,8 @@ import UIKit
 
 enum DSColor: String {
     case blue = "Blue"
+    
+    case dayBlack = "Black [day]"
     case dayWhite = "White [day]"
 }
 

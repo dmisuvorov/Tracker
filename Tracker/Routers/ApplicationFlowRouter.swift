@@ -18,6 +18,7 @@ final class ApplicationFlowRouter {
         let trackersViewController = TrackersViewController()
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
         trackersNavigationController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(named: "TrackerTabIcon"), tag: 0)
+        trackersNavigationController.navigationBar.prefersLargeTitles = true
 
         let statisticsViewController = StatisticsViwController()
         let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
