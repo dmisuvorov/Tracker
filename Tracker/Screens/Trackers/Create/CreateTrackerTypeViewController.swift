@@ -7,6 +7,8 @@
 import UIKit
 
 final class CreateTrackerTypeViewController: UIViewController {
+    var router: ApplicationFlowRouter? = nil
+    
     private lazy var habitTrackerTypeButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
@@ -39,11 +41,13 @@ final class CreateTrackerTypeViewController: UIViewController {
     }
     
     @objc func onChoseHabitTracker() {
-        
+        guard let navigationController = navigationController else { return }
+        router?.createNewTrackSecondStep(trackerType: TrackerType.habit, parentNavigationController: navigationController)
     }
     
     @objc func onChoseIrregularEventTracker() {
-        
+        guard let navigationController = navigationController else { return }
+        router?.createNewTrackSecondStep(trackerType: TrackerType.irregularEvent, parentNavigationController: navigationController)
     }
     
     private func configureUI() {

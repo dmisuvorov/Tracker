@@ -79,7 +79,7 @@ final class TrackersViewController : UIViewController {
     }
     
     @objc private func onAddButtonClick() {
-        router?.createNewTrack(parentVC: self)
+        router?.createNewTrackFirstStep(parentVC: self)
     }
     
     private func configureUI() {

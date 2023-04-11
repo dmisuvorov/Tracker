@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		625A20A129E0AF4900B6F79B /* CreateTrackerTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */; };
+		625A20A329E2031700B6F79B /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625A20A229E2031700B6F79B /* CreateTrackerViewController.swift */; };
+		625A20A529E203B200B6F79B /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625A20A429E203B200B6F79B /* TrackerType.swift */; };
+		625A20A929E4341A00B6F79B /* TrackerConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625A20A829E4341A00B6F79B /* TrackerConfigCell.swift */; };
 		62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */; };
 		62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */; };
 		62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECD8F229D5C489008956CE /* AppDelegate.swift */; };
-		62ECD8F729D5C489008956CE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECD8F629D5C489008956CE /* ViewController.swift */; };
 		62ECD8FA29D5C489008956CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62ECD8F829D5C489008956CE /* Main.storyboard */; };
 		62ECD8FC29D5C48B008956CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62ECD8FB29D5C48B008956CE /* Assets.xcassets */; };
 		62ECD8FF29D5C48B008956CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62ECD8FD29D5C48B008956CE /* LaunchScreen.storyboard */; };
@@ -26,11 +28,13 @@
 
 /* Begin PBXFileReference section */
 		625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerTypeViewController.swift; sourceTree = "<group>"; };
+		625A20A229E2031700B6F79B /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
+		625A20A429E203B200B6F79B /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
+		625A20A829E4341A00B6F79B /* TrackerConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerConfigCell.swift; sourceTree = "<group>"; };
 		62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		62ECD8EF29D5C489008956CE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62ECD8F229D5C489008956CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		62ECD8F629D5C489008956CE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		62ECD8F929D5C489008956CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		62ECD8FB29D5C48B008956CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62ECD8FE29D5C48B008956CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -59,6 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				625A20A029E0AF4900B6F79B /* CreateTrackerTypeViewController.swift */,
+				625A20A229E2031700B6F79B /* CreateTrackerViewController.swift */,
+				625A20A829E4341A00B6F79B /* TrackerConfigCell.swift */,
 			);
 			path = Create;
 			sourceTree = "<group>";
@@ -87,7 +93,6 @@
 				62ECD90929D7849B008956CE /* Utils */,
 				62ECD90629D78084008956CE /* Screens */,
 				62ECD8F229D5C489008956CE /* AppDelegate.swift */,
-				62ECD8F629D5C489008956CE /* ViewController.swift */,
 				62ECD8F829D5C489008956CE /* Main.storyboard */,
 				62ECD8FB29D5C48B008956CE /* Assets.xcassets */,
 				62ECD8FD29D5C48B008956CE /* LaunchScreen.storyboard */,
@@ -146,6 +151,7 @@
 				62ECD91829DCC202008956CE /* Day.swift */,
 				62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */,
 				62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */,
+				625A20A429E203B200B6F79B /* TrackerType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -223,14 +229,16 @@
 			files = (
 				62ECD91929DCC202008956CE /* Day.swift in Sources */,
 				625A20A129E0AF4900B6F79B /* CreateTrackerTypeViewController.swift in Sources */,
-				62ECD8F729D5C489008956CE /* ViewController.swift in Sources */,
 				62ECD90829D7809A008956CE /* TabBarController.swift in Sources */,
+				625A20A529E203B200B6F79B /* TrackerType.swift in Sources */,
+				625A20A929E4341A00B6F79B /* TrackerConfigCell.swift in Sources */,
 				62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */,
 				62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */,
 				62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */,
 				62ECD90E29D78E78008956CE /* ApplicationFlowRouter.swift in Sources */,
 				62ECD91729DCC12D008956CE /* Tracker.swift in Sources */,
 				62ECD91429D78F1E008956CE /* TrackersViewController.swift in Sources */,
+				625A20A329E2031700B6F79B /* CreateTrackerViewController.swift in Sources */,
 				62ECD90B29D784B9008956CE /* UIColor+Common.swift in Sources */,
 				62ECD91229D78F0D008956CE /* StatisticsViewController.swift in Sources */,
 			);
