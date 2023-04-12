@@ -14,6 +14,7 @@ final class CreateTrackerViewController : UIViewController {
             configureTrackerConfig()
         }
     }
+    var router: ApplicationFlowRouter? = nil
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
     
@@ -43,7 +44,10 @@ final class CreateTrackerViewController : UIViewController {
     }()
     
     private lazy var scheduleTrackerCell: TrackerConfigCell = {
-        let scheduleTrackerCell = TrackerConfigCell(title: "Расписание")
+        let scheduleTrackerCell = TrackerConfigCell(title: "Расписание", onClick: { [weak self] in
+            guard let self = self, let navigationController = self.navigationController else { return }
+            self.router?.confugureNewTrackSchedule(parentNavigationController: navigationController)
+        })
         scheduleTrackerCell.translatesAutoresizingMaskIntoConstraints = false
         return scheduleTrackerCell
     }()

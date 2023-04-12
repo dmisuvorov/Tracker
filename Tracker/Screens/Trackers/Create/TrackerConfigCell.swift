@@ -8,6 +8,8 @@
 import UIKit
 
 final class TrackerConfigCell : UIView {
+    private var onClickAction: (() -> Void)? = nil
+    
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 17)
@@ -55,7 +57,8 @@ final class TrackerConfigCell : UIView {
     init(
         title: String,
         subtitle: String? = nil,
-        hasDivider: Bool = false
+        hasDivider: Bool = false,
+        onClick: @escaping () -> Void = {}
     ) {
         super.init(frame: CGRect.zero)
         layer.masksToBounds = true
@@ -82,6 +85,10 @@ final class TrackerConfigCell : UIView {
             divider.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
+        onClickAction = onClick
+        isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onCellClick))
+        addGestureRecognizer(tapGesture)
     }
     
     func showDivider() {
@@ -97,5 +104,9 @@ final class TrackerConfigCell : UIView {
             return
         }
         labelStackView.addArrangedSubview(subtitleLabel)
+    }
+    
+    @objc private func onCellClick() {
+        onClickAction?()
     }
 }

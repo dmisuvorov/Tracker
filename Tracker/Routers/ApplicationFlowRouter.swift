@@ -50,6 +50,12 @@ final class ApplicationFlowRouter {
     func createNewTrackSecondStep(trackerType: TrackerType, parentNavigationController: UINavigationController) {
         let createTrackerViewController = CreateTrackerViewController()
         createTrackerViewController.trackerType = trackerType
+        createTrackerViewController.router = self
         parentNavigationController.pushViewController(createTrackerViewController, animated: true)
+    }
+    
+    func confugureNewTrackSchedule(parentNavigationController: UINavigationController) {
+        let scheduleViewController = ScheduleViewController()
+        parentNavigationController.pushViewController(scheduleViewController, animated: true)
     }
 }

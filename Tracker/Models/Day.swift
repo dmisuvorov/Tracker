@@ -5,12 +5,12 @@
 //  Created by Суворов Дмитрий Владимирович on 04.04.2023.
 //
 
-enum Day: String {
-    case mon = "Monday"
-    case tue = "Tuesday"
-    case wed = "Wednesday"
-    case thu = "Thursday"
-    case fri = "Friday"
-    case sat = "Saturday"
-    case sun = "Sunday"
+enum Day: String, CaseIterable {
+    case mon = "Понедельник"
+    case tue = "Вторник"
+    case wed = "Среда"
+    case thu = "Четверг"
+    case fri = "Пятница"
+    case sat = "Суббота"
+    case sun = "Воскресенье"
 }
