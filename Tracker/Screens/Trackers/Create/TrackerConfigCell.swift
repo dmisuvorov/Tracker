@@ -96,7 +96,7 @@ final class TrackerConfigCell : UIView {
     }
     
     func updateSubtitle(subtitle: String?) {
-        let isHidden = subtitle == nil && subtitle == ""
+        let isHidden = subtitle == nil || subtitle == ""
         subtitleLabel.isHidden = isHidden
         subtitleLabel.text = subtitle
         if isHidden {

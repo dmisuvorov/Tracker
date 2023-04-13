@@ -8,7 +8,9 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
+    var scheduleDelegate: ScheduleDelegate? = nil
     var selectedDays: Set<Day> = []
+    
     private let days = Day.allCases
     
     private lazy var readyButton: UIButton = {
@@ -42,7 +44,8 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc private func onReadyButtonClick() {
-        
+        scheduleDelegate?.onSelectSchedule(selectedDays: selectedDays)
+        navigationController?.popViewController(animated: true)
     }
     
     private func configureUI() {

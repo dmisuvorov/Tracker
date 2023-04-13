@@ -31,6 +31,7 @@ final class ScheduleViewCell : UITableViewCell {
     private lazy var daySwitch: UISwitch = {
         let daySwitch = UISwitch()
         daySwitch.onTintColor = UIColor.dsColor(dsColor: DSColor.blue)
+        daySwitch.isUserInteractionEnabled = false
         daySwitch.translatesAutoresizingMaskIntoConstraints = false
         return daySwitch
     }()

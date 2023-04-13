@@ -54,8 +54,14 @@ final class ApplicationFlowRouter {
         parentNavigationController.pushViewController(createTrackerViewController, animated: true)
     }
     
-    func confugureNewTrackSchedule(parentNavigationController: UINavigationController) {
+    func confugureNewTrackSchedule(
+        selectedSchedule: Set<Day>,
+        scheduleDelegate: ScheduleDelegate,
+        parentNavigationController: UINavigationController
+    ) {
         let scheduleViewController = ScheduleViewController()
+        scheduleViewController.scheduleDelegate = scheduleDelegate
+        scheduleViewController.selectedDays = selectedSchedule
         parentNavigationController.pushViewController(scheduleViewController, animated: true)
     }
 }

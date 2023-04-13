@@ -17,6 +17,7 @@ final class CreateTrackerViewController : UIViewController {
     var router: ApplicationFlowRouter? = nil
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
+    private var selectedSchedule: Set<Day> = [] { didSet { updateCreateButtonStatus() } }
     
     private lazy var trackerNameBackgroundShape: UIView = {
         let trackerNameBackgroundShape = UIView()
@@ -46,7 +47,13 @@ final class CreateTrackerViewController : UIViewController {
     private lazy var scheduleTrackerCell: TrackerConfigCell = {
         let scheduleTrackerCell = TrackerConfigCell(title: "Расписание", onClick: { [weak self] in
             guard let self = self, let navigationController = self.navigationController else { return }
-            self.router?.confugureNewTrackSchedule(parentNavigationController: navigationController)
+            
+            self.router?
+                .confugureNewTrackSchedule(
+                    selectedSchedule: self.selectedSchedule,
+                    scheduleDelegate: self,
+                    parentNavigationController: navigationController
+                )
         })
         scheduleTrackerCell.translatesAutoresizingMaskIntoConstraints = false
         return scheduleTrackerCell
@@ -189,8 +196,9 @@ final class CreateTrackerViewController : UIViewController {
     
     private func updateCreateButtonStatus() {
         let isValidTrackerName = currentTrackerName != nil && currentTrackerName != ""
+        let isValidSchedule = trackerType == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
         
-        let isEnabledCreateButton = isValidTrackerName
+        let isEnabledCreateButton = isValidTrackerName && isValidSchedule
         if isEnabledCreateButton {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
@@ -198,5 +206,12 @@ final class CreateTrackerViewController : UIViewController {
         }
         createButton.isEnabled = false
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
+    }
+}
+
+extension CreateTrackerViewController : ScheduleDelegate {
+    func onSelectSchedule(selectedDays: Set<Day>) {
+        selectedSchedule = selectedDays
+        scheduleTrackerCell.updateSubtitle(subtitle: selectedSchedule.toShortDescription())
     }
 }
