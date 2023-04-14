@@ -10,4 +10,5 @@ struct TrackerView {
     let color: String
     let emoji: String
     let daysCompleted: String
+    let isDoneInCurrentDate: Bool
 }

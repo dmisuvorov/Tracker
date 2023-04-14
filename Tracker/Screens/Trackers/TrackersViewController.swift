@@ -14,6 +14,24 @@ final class TrackersViewController : UIViewController {
     private var completedTrackers: Set<TrackerRecord> = []
     private var currentDate: Date = Date()
     
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        return dateFormatter
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(TrackerViewCell.self, forCellWithReuseIdentifier: TrackerViewCell.identifier)
+        collectionView.register(CategoryTrackerViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTrackerViewCell.identifier)
+        collectionView.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
+    
     private lazy var addButton: UIBarButtonItem = {
         let addButton = UIBarButtonItem(
             image: UIImage(named: "AddButton"),
@@ -28,6 +46,7 @@ final class TrackersViewController : UIViewController {
     
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
+        datePicker.locale = dateFormatter.locale
         datePicker.preferredDatePickerStyle = UIDatePickerStyle.compact
         datePicker.datePickerMode = UIDatePicker.Mode.date
         
@@ -64,7 +83,7 @@ final class TrackersViewController : UIViewController {
         stack.spacing = 8
         stack.alignment = UIStackView.Alignment.center
         stack.translatesAutoresizingMaskIntoConstraints = false
-        
+        stack.isHidden = true
         stack.addArrangedSubview(placeHolderImage)
         stack.addArrangedSubview(placeHolderLabel)
         
@@ -83,12 +102,17 @@ final class TrackersViewController : UIViewController {
     }
     
     private func configureUI() {
-        emptyTrackersPlaceholderView.isHidden = false
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
         
+        view.addSubview(collectionView)
         view.addSubview(emptyTrackersPlaceholderView)
         
         NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
             emptyTrackersPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emptyTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
@@ -110,4 +134,49 @@ final class TrackersViewController : UIViewController {
 
 extension TrackersViewController: UITextFieldDelegate {
     
+}
+
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize.init(width: collectionView.frame.width, height: 30)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return .init(width: (collectionView.frame.width - 41) / 2.0, height: 148)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .init(top: 12, left: 16, bottom: 32, right: 16)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return 8
+    }
+}
+
+extension TrackersViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return visibleCategories.indices.contains(section) ? visibleCategories[section].trackers.count : 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerViewCell.identifier, for: indexPath) as? TrackerViewCell else { return UICollectionViewCell() }
+        
+        let currentTracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        let isCurrentTrackerDoneInCurrentDate = completedTrackers.filter { $0.id == currentTracker.id && $0.date == currentDate }.count > 0
+        let countOfCompleted = completedTrackers.filter { $0.id == currentTracker.id }.count
+        let trackerView = TrackerView(
+            name: currentTracker.name,
+            color: currentTracker.color,
+            emoji: currentTracker.emoji,
+            daysCompleted: "\(countOfCompleted) \(countOfCompleted.daysString())",
+            isDoneInCurrentDate: isCurrentTrackerDoneInCurrentDate
+        )
+        cell.bindCell(tracker: trackerView)
+        return cell
+    }
 }

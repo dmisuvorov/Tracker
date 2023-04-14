@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackerViewCell : UICollectionViewCell {
     
+    static let identifier = "TrackerCell"
+    
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
         addButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
@@ -116,6 +118,13 @@ final class TrackerViewCell : UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         let backgroundColor = UIColor.colorFromHex(hexString: tracker.color) ?? UIColor.dsColor(dsColor: DSColor.blue)
         backgroundShape.backgroundColor = backgroundColor
+        
+        if tracker.isDoneInCurrentDate {
+            addButton.setImage(UIImage(systemName: "checkmark"), for: UIControl.State.normal)
+            addButton.backgroundColor = backgroundColor.withAlphaComponent(0.3)
+            return
+        }
+        addButton.setImage(UIImage(systemName: "plus"), for: UIControl.State.normal)
         addButton.backgroundColor = backgroundColor
     }
 }

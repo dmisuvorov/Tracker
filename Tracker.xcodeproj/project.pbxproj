@@ -29,6 +29,8 @@
 		62F274F429E7F6D2009B9862 /* ScheduleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F274F329E7F6D2009B9862 /* ScheduleDelegate.swift */; };
 		62F274F629E81CFF009B9862 /* TrackerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F274F529E81CFF009B9862 /* TrackerViewCell.swift */; };
 		62F274F829E98914009B9862 /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F274F729E98914009B9862 /* TrackerView.swift */; };
+		62F274FA29E9F081009B9862 /* CategoryTrackerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F274F929E9F081009B9862 /* CategoryTrackerViewCell.swift */; };
+		62F274FC29E9FF73009B9862 /* Int+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F274FB29E9FF73009B9862 /* Int+Common.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,8 @@
 		62F274F329E7F6D2009B9862 /* ScheduleDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDelegate.swift; sourceTree = "<group>"; };
 		62F274F529E81CFF009B9862 /* TrackerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewCell.swift; sourceTree = "<group>"; };
 		62F274F729E98914009B9862 /* TrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerView.swift; sourceTree = "<group>"; };
+		62F274F929E9F081009B9862 /* CategoryTrackerViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTrackerViewCell.swift; sourceTree = "<group>"; };
+		62F274FB29E9FF73009B9862 /* Int+Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Common.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				62ECD90A29D784B9008956CE /* UIColor+Common.swift */,
+				62F274FB29E9FF73009B9862 /* Int+Common.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -146,6 +151,7 @@
 				625A209F29E0AF2600B6F79B /* Create */,
 				62ECD91329D78F1E008956CE /* TrackersViewController.swift */,
 				62F274F529E81CFF009B9862 /* TrackerViewCell.swift */,
+				62F274F929E9F081009B9862 /* CategoryTrackerViewCell.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -259,6 +265,8 @@
 				62ECD91729DCC12D008956CE /* Tracker.swift in Sources */,
 				62ECD91429D78F1E008956CE /* TrackersViewController.swift in Sources */,
 				625A20A329E2031700B6F79B /* CreateTrackerViewController.swift in Sources */,
+				62F274FA29E9F081009B9862 /* CategoryTrackerViewCell.swift in Sources */,
+				62F274FC29E9FF73009B9862 /* Int+Common.swift in Sources */,
 				62ECD90B29D784B9008956CE /* UIColor+Common.swift in Sources */,
 				62ECD91229D78F0D008956CE /* StatisticsViewController.swift in Sources */,
 			);
