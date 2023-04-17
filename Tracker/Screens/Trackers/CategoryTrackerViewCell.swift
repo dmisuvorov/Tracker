@@ -10,7 +10,7 @@ import UIKit
 final class CategoryTrackerViewCell: UICollectionReusableView {
     static let identifier = "CategoryTrackerViewCell"
     
-    let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
         nameLabel.font = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.bold)

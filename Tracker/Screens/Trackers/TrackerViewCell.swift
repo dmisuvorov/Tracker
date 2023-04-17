@@ -8,8 +8,10 @@
 import UIKit
 
 final class TrackerViewCell : UICollectionViewCell {
-    
+    weak var delegate: TrackersViewProtocol?
     static let identifier = "TrackerCell"
+    
+    private (set) var trackerId: UUID? = nil
     
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
@@ -88,8 +90,8 @@ final class TrackerViewCell : UICollectionViewCell {
             addButton.widthAnchor.constraint(equalToConstant: 34),
             addButton.heightAnchor.constraint(equalToConstant: 34),
             addButton.topAnchor.constraint(equalTo: backgroundShape.bottomAnchor, constant: 8),
-            addButton.bottomAnchor.constraint(equalTo: backgroundShape.bottomAnchor, constant: -16),
-            addButton.trailingAnchor.constraint(equalTo: backgroundShape.trailingAnchor, constant: -12),
+            addButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            addButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             
             dayLabel.centerYAnchor.constraint(equalTo: addButton.centerYAnchor),
             dayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
@@ -109,10 +111,11 @@ final class TrackerViewCell : UICollectionViewCell {
     }
     
     @objc func onAddButtonClick() {
-        
+        delegate?.onTrackerCellButtonClick(trackerCell: self)
     }
     
     func bindCell(tracker: TrackerView) {
+        trackerId = tracker.id
         titleLabel.text = tracker.name
         dayLabel.text = tracker.daysCompleted
         emojiLabel.text = tracker.emoji

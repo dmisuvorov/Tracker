@@ -18,6 +18,9 @@ final class CreateTrackerViewController : UIViewController {
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
     private var selectedSchedule: Set<Day> = [] { didSet { updateCreateButtonStatus() } }
+    private let trackersRepository: TrackersRepository = TrackersRepository.shared
+    
+    private let defaultCategory = "По умолчанию"
     
     private lazy var trackerNameBackgroundShape: UIView = {
         let trackerNameBackgroundShape = UIView()
@@ -39,7 +42,7 @@ final class CreateTrackerViewController : UIViewController {
     }()
     
     private lazy var categoryTrackerCell: TrackerConfigCell = {
-        let categoryTrackerCell = TrackerConfigCell(title: "Категория", subtitle: "По умолчанию")
+        let categoryTrackerCell = TrackerConfigCell(title: "Категория", subtitle: defaultCategory)
         categoryTrackerCell.translatesAutoresizingMaskIntoConstraints = false
         return categoryTrackerCell
     }()
@@ -111,7 +114,21 @@ final class CreateTrackerViewController : UIViewController {
     }
     
     @objc func onCreateButtonClick() {
+        guard let currentTrackerName else { return }
         
+        let newTracker = Tracker(
+            id: UUID(),
+            name: currentTrackerName,
+            color: randomColor(),
+            emoji: randomEmoji(),
+            day: trackerType == TrackerType.irregularEvent ? nil : selectedSchedule
+        )
+        trackersRepository.addNewTracker(tracker: newTracker, categoryName: defaultCategory)
+        NotificationCenter.default.post(
+            name: TrackersRepository.addTrackerNotification,
+            object: nil
+        )
+        dismiss(animated: true)
     }
     
     private func configureUI() {

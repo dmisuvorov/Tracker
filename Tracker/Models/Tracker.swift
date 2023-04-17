@@ -11,5 +11,5 @@ struct Tracker {
     let name: String
     let color: String
     let emoji: String
-    let day: Set<Day>
+    let day: Set<Day>?
 }

@@ -20,11 +20,9 @@ extension UIColor {
     static func dsColor(dsColor: DSColor) -> UIColor {
         UIColor(named: dsColor.rawValue) ?? .clear
     }
-}
 
-extension UIColor {
     static func colorFromHex(hexString: String) -> UIColor? {
-        var hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         
         guard hex.count == 6 else { return nil }
         
