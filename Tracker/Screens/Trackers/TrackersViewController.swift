@@ -233,7 +233,8 @@ extension TrackersViewController: UITextFieldDelegate {
             return true
         }
         let newLength = text.count + string.count - range.length
-
+        searchText = text
+        applyConditionAndShowTrackers()
         return newLength <= 38
     }
 

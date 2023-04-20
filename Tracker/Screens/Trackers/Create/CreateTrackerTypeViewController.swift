@@ -40,12 +40,14 @@ final class CreateTrackerTypeViewController: UIViewController {
         configureUI()
     }
     
-    @objc func onChoseHabitTracker() {
+    @objc
+    private func onChoseHabitTracker() {
         guard let navigationController = navigationController else { return }
         router?.createNewTrackSecondStep(trackerType: TrackerType.habit, parentNavigationController: navigationController)
     }
     
-    @objc func onChoseIrregularEventTracker() {
+    @objc
+    private func onChoseIrregularEventTracker() {
         guard let navigationController = navigationController else { return }
         router?.createNewTrackSecondStep(trackerType: TrackerType.irregularEvent, parentNavigationController: navigationController)
     }

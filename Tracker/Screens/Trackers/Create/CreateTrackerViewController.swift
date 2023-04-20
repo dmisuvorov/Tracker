@@ -105,15 +105,18 @@ final class CreateTrackerViewController : UIViewController {
         configureUI()
     }
     
-    @objc func onTrackerNameChanged(_ sender: UITextInput) {
+    @objc
+    private func onTrackerNameChanged(_ sender: UITextInput) {
         currentTrackerName = trackerNameTextField.text
     }
     
-    @objc func onCancelButtonClick() {
+    @objc
+    private func onCancelButtonClick() {
         dismiss(animated: true)
     }
     
-    @objc func onCreateButtonClick() {
+    @objc
+    private func onCreateButtonClick() {
         guard let currentTrackerName else { return }
         
         let newTracker = Tracker(
@@ -212,7 +215,7 @@ final class CreateTrackerViewController : UIViewController {
     }
     
     private func updateCreateButtonStatus() {
-        let isValidTrackerName = currentTrackerName != nil && currentTrackerName != ""
+        let isValidTrackerName = currentTrackerName?.isEmpty == false
         let isValidSchedule = trackerType == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
         
         let isEnabledCreateButton = isValidTrackerName && isValidSchedule
