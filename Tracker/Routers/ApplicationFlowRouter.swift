@@ -34,7 +34,7 @@ final class ApplicationFlowRouter {
     func createNewTrackFirstStep(parentVC: UIViewController) {
         let createTrackerTypeViewController = CreateTrackerTypeViewController()
         createTrackerTypeViewController.router = self
-        let createNewTrackNavigationViewController = UINavigationController()
+        let createNewTrackNavigationViewController = UINavigationController(rootViewController: createTrackerTypeViewController)
         
         let createNewTrackNavigationBarAppearence = UINavigationBarAppearance()
         createNewTrackNavigationBarAppearence.configureWithOpaqueBackground()
@@ -44,7 +44,6 @@ final class ApplicationFlowRouter {
         createNewTrackNavigationViewController.navigationBar.standardAppearance = createNewTrackNavigationBarAppearence
         
         parentVC.present(createNewTrackNavigationViewController, animated: true)
-        createNewTrackNavigationViewController.pushViewController(createTrackerTypeViewController, animated: true)
     }
     
     func createNewTrackSecondStep(trackerType: TrackerType, parentNavigationController: UINavigationController) {
