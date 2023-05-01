@@ -9,6 +9,7 @@ import UIKit
 enum DSColor: String {
     case blue = "Blue"
     case gray = "Gray"
+    case lightGray = "Light Gray"
     case red = "Red"
     
     case dayBackground = "Background [day]"
@@ -35,4 +36,20 @@ extension UIColor {
 
         return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
     }
+    
+    func colorToHexString() -> String {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        let redInt = Int(red * 255)
+        let greenInt = Int(green * 255)
+        let blueInt = Int(blue * 255)
+        
+        return String(format: "#%02X%02X%02X", redInt, greenInt, blueInt)
+    }
+
 }
