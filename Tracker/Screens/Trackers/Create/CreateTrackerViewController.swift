@@ -156,7 +156,13 @@ final class CreateTrackerViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
         configureUI()
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     @objc

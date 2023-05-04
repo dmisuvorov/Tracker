@@ -78,7 +78,6 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
         searchController.searchBar.searchTextField.delegate = self
-        
         return searchController
     }()
     
@@ -121,12 +120,18 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapGesture)
         configureUI()
         configureNavigationBar()
         configureObserver()
         
         presenter = TrackersPresenter(trackersView: self)
         applyConditionAndShowTrackers()
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     @objc private func onAddButtonClick() {
