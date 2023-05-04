@@ -183,10 +183,6 @@ final class CreateTrackerViewController : UIViewController {
             day: trackerType == TrackerType.irregularEvent ? nil : selectedSchedule
         )
         trackersRepository.addNewTracker(tracker: newTracker, categoryName: defaultCategory)
-        NotificationCenter.default.post(
-            name: TrackersRepository.addTrackerNotification,
-            object: nil
-        )
         dismiss(animated: true)
     }
     

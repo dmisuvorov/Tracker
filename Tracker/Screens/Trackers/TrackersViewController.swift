@@ -196,7 +196,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         addTrackerObserver = NotificationCenter
             .default
             .addObserver(
-                forName: TrackersRepository.addTrackerNotification,
+                forName: TrackersRepository.changeContentNotification,
                 object: nil,
                 queue: OperationQueue.main
             ) { [weak self] _ in

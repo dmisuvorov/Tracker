@@ -8,28 +8,37 @@ import UIKit
 
 final class TrackersRepository {
     static let shared = TrackersRepository()
-    static let addTrackerNotification = Notification.Name(rawValue: "AddTrackerNotification")
+    static let changeContentNotification = Notification.Name(rawValue: "ChangeContentNotification")
     
-    private var categories: [TrackerCategory] = []
+    private (set) var categories: [TrackerCategory] = []
+    private (set) var completedTrackers: Set<TrackerRecord> = []
     
-    private init() { }
+    private lazy var trackerStore: TrackerStore = {
+        let trackerStore = TrackerStore(storeDelegate: self)
+        return trackerStore
+    }()
+    
+    private lazy var trackerCategoryStore: TrackerCategoryStore = {
+        let trackerCategoryStore = TrackerCategoryStore(storeDelegate: self)
+        return trackerCategoryStore
+    }()
+    
+    private lazy var trackerRecordStore: TrackerRecordStore = {
+        let trackerRecordStore = TrackerRecordStore(storeDelegate: self)
+        return trackerRecordStore
+    }()
+    
+    private init() {
+        categories = trackerCategoryStore.categories
+        completedTrackers = Set(trackerRecordStore.records)
+    }
     
     func addNewTracker(tracker: Tracker, categoryName: String) {
-        var currentCategories = categories
-        let categoryIndex = currentCategories.firstIndex { category in
-            category.name == categoryName
+        let category: TrackerCategory? = trackerCategoryStore.getByName(name: categoryName)
+        if category == nil {
+            trackerCategoryStore.addCategory(name: categoryName)
         }
-        let isCategoryExists = categoryIndex != nil
-        if isCategoryExists {
-            var currentTrackers = currentCategories[categoryIndex ?? 0].trackers
-            currentTrackers.append(tracker)
-            currentCategories[categoryIndex ?? 0] = TrackerCategory(name: categoryName, trackers: currentTrackers)
-            categories = currentCategories
-            return
-        }
-        let newTrackerCategory = TrackerCategory(name: categoryName, trackers: [tracker])
-        currentCategories.append(newTrackerCategory)
-        categories = currentCategories
+        trackerStore.addTracker(tracker: tracker, category: trackerCategoryStore.getByName(name: categoryName))
     }
     
     func getTrackersByFilter(filter: (Tracker) -> Bool) -> [TrackerCategory] {
@@ -43,5 +52,23 @@ final class TrackersRepository {
             }
         }
         return resultCategories
+    }
+    
+    func addTrackerRecord(trackerRecord: TrackerRecord) {
+        trackerRecordStore.addTrackerRecord(trackerRecord: trackerRecord)
+    }
+    
+    func deleteTrackerRecord(trackerRecord: TrackerRecord) {
+        trackerRecordStore.deleteTrackerRecord(trackerRecord: trackerRecord)
+    }
+}
+
+extension TrackersRepository: StoreDelegate {
+    
+    func didChangeContent() {
+        categories = trackerCategoryStore.categories
+        completedTrackers = Set(trackerRecordStore.records)
+        
+        NotificationCenter.default.post(name: TrackersRepository.changeContentNotification, object: nil)
     }
 }

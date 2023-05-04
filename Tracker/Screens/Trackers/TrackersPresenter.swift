@@ -10,7 +10,6 @@ final class TrackersPresenter {
     
     private weak var trackersView: TrackersViewProtocol? = nil
     private var currentDate: Date = Date()
-    private var completedTrackers: Set<TrackerRecord> = []
     private let trackersRepository = TrackersRepository.shared
     
     init(trackersView: TrackersViewProtocol) {
@@ -26,7 +25,10 @@ final class TrackersPresenter {
             trackersView?.showEmptyPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(categories: currentTrackers, completedTrackers: completedTrackers)
+        trackersView?.showCurrentTrackers(
+            categories: currentTrackers,
+            completedTrackers: trackersRepository.completedTrackers
+        )
     }
     
     func searchTrackersByName(name: String) {
@@ -38,7 +40,10 @@ final class TrackersPresenter {
             trackersView?.showEmptySearchPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(categories: currentTrackers, completedTrackers: completedTrackers)
+        trackersView?.showCurrentTrackers(
+            categories: currentTrackers,
+            completedTrackers: trackersRepository.completedTrackers
+        )
     }
     
     func updateCurrentDate(date: Date) {
@@ -47,16 +52,18 @@ final class TrackersPresenter {
     
     func completeTracker(trackerId: UUID) {
         let completeTracker = TrackerRecord(id: trackerId, date: currentDate)
-        if completedTrackers.contains(completeTracker) {
-            completedTrackers.remove(completeTracker)
+        if trackersRepository.completedTrackers.contains(where: { record in record.date.isEqualDay(currentDate) }) {
+            trackersRepository.deleteTrackerRecord(trackerRecord: completeTracker)
         } else {
-            completedTrackers.insert(completeTracker)
+            trackersRepository.addTrackerRecord(trackerRecord: completeTracker)
         }
     }
     
     func onBindTrackerCell(cell: TrackerViewCell, tracker: Tracker) {
-        let isCurrentTrackerDoneInCurrentDate = completedTrackers.filter { $0.id == tracker.id && $0.date == currentDate }.count > 0
-        let countOfCompleted = completedTrackers.filter { $0.id == tracker.id }.count
+        let isCurrentTrackerDoneInCurrentDate = trackersRepository.completedTrackers
+            .filter { $0.id == tracker.id && $0.date.isEqualDay(currentDate) }.count > 0
+        let countOfCompleted = trackersRepository.completedTrackers
+            .filter { $0.id == tracker.id }.count
         let trackerViewModel = TrackerView(
             id: tracker.id,
             name: tracker.name,

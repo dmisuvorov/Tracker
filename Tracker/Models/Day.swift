@@ -5,7 +5,7 @@
 //  Created by Суворов Дмитрий Владимирович on 04.04.2023.
 //
 
-enum Day: String, CaseIterable {
+enum Day: String, CaseIterable, Codable {
     case mon = "Понедельник"
     case tue = "Вторник"
     case wed = "Среда"
