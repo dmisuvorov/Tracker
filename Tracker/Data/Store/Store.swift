@@ -8,9 +8,9 @@ import CoreData
 import UIKit
 
 class Store: NSObject {
-    internal var storeDelegate: StoreDelegate? = nil
+    weak var storeDelegate: StoreDelegate? = nil
     
-    internal lazy var context: NSManagedObjectContext = {
+    lazy var context: NSManagedObjectContext = {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return context
     }()
