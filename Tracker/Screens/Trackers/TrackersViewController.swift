@@ -123,6 +123,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         configureUI()
         configureNavigationBar()
