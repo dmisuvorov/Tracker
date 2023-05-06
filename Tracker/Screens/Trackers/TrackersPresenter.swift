@@ -35,7 +35,7 @@ final class TrackersPresenter {
     func searchTrackersByName(name: String) {
         let currentDay = currentSelectedDate.dayOfWeek()
         let currentTrackers = trackersRepository.getTrackersByFilter { tracker in
-            tracker.day?.contains(currentDay) ?? true && tracker.name.contains(name)
+            tracker.day?.contains(currentDay) ?? true && tracker.name.lowercased().contains(name)
         }
         if currentTrackers.isEmpty {
             trackersView?.showEmptySearchPlaceholder()
