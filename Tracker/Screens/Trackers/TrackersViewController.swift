@@ -77,6 +77,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
+        searchController.delegate = self
         searchController.searchBar.searchTextField.delegate = self
         searchController.searchBar.searchTextField
             .addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
@@ -249,6 +250,13 @@ extension TrackersViewController: UITextFieldDelegate {
         }
         let newLength = text.count + string.count - range.length
         return newLength <= 38
+    }
+}
+
+extension TrackersViewController: UISearchControllerDelegate {
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchText = ""
+        applyConditionAndShowTrackers()
     }
 }
 
