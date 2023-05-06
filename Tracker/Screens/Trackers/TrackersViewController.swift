@@ -182,7 +182,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     func onTrackerCellButtonClick(trackerCell: TrackerViewCell) {
         guard let id = trackerCell.trackerId else { return }
-        presenter?.completeTracker(trackerId: id)
+        presenter?.processTrackerClick(trackerId: id)
         applyConditionAndShowTrackers()
     }
     

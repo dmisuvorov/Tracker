@@ -70,11 +70,10 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
 extension TrackerCategoryCoreData {
     
     func toTrackerCategory(decoder: JSONDecoder) -> TrackerCategory? {
-        guard let name = name else { return nil }
-        let trackersCoreData = trackers as? Set<TrackerCoreData> ?? []
-        let trackers = trackersCoreData.compactMap { tracker in
-            tracker.toTracker(decoder: decoder)
-        }
+        guard let name = name, let trackersCoreData = trackers else { return nil }
+        let trackers = trackersCoreData.map { trackerCoreData in
+            (trackerCoreData as? TrackerCoreData)?.toTracker(decoder: decoder)
+        }.compactMap{ $0 }
         return TrackerCategory(name: name, trackers: trackers)
     }
 }

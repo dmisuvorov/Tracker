@@ -51,27 +51,24 @@ final class TrackersPresenter {
         currentSelectedDate = date
     }
     
-    func completeTracker(trackerId: UUID) {
+    func processTrackerClick(trackerId: UUID) {
         guard currentSelectedDate <= currentDate else { return }
         let completeTracker = TrackerRecord(id: trackerId, date: currentSelectedDate)
-        let isNeedComplete =
+        let isNeedMarkUncomplete =
             trackersRepository.completedTrackers
-                .contains(
-                    where: { record in
-                        record.id == trackerId && record.date == currentSelectedDate
-                    }
-                )
+                .contains(where: { record in record.id == trackerId })
         
-        if isNeedComplete {
+        if isNeedMarkUncomplete {
             trackersRepository.deleteTrackerRecord(trackerRecord: completeTracker)
         } else {
+            
             trackersRepository.addTrackerRecord(trackerRecord: completeTracker)
         }
     }
     
     func onBindTrackerCell(cell: TrackerViewCell, tracker: Tracker) {
         let isCurrentTrackerDoneInCurrentDate = trackersRepository.completedTrackers
-            .filter { $0.id == tracker.id && $0.date == currentDate }.count > 0
+            .filter { $0.id == tracker.id && $0.date == currentSelectedDate }.count > 0
         let countOfCompleted = trackersRepository.completedTrackers
             .filter { $0.id == tracker.id }.count
         let trackerViewModel = TrackerView(
