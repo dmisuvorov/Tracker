@@ -19,11 +19,26 @@ extension Date {
         return calendar.date(byAdding: .second, value: -1, to: startOfNextDay) ?? Date()
     }
     
-    func isEqualDay(_ date: Date) -> Bool {
+    static func ==(lhs: Date, rhs: Date) -> Bool {
         let calendar = Calendar.current
-        let components1 = calendar.dateComponents([.year, .month, .day], from: self)
-        let components2 = calendar.dateComponents([.year, .month, .day], from: date)
-        return components1.year == components2.year && components1.month == components2.month && components1.day == components2.day
+        let comparisonResult = calendar.compare(lhs, to: rhs, toGranularity: Calendar.Component.day)
+        return comparisonResult == ComparisonResult.orderedSame
+    }
+        
+    static func <(lhs: Date, rhs: Date) -> Bool {
+        let calendar = Calendar.current
+        let comparisonResult = calendar.compare(lhs, to: rhs, toGranularity: Calendar.Component.day)
+        return comparisonResult == ComparisonResult.orderedAscending
+    }
+        
+    static func >(lhs: Date, rhs: Date) -> Bool {
+        let calendar = Calendar.current
+        let comparisonResult = calendar.compare(lhs, to: rhs, toGranularity: Calendar.Component.day)
+        return comparisonResult == ComparisonResult.orderedDescending
+    }
+    
+    static func <=(lhs: Date, rhs: Date) -> Bool {
+        return lhs < rhs || lhs == rhs
     }
     
     func dayOfWeek() -> Day {
