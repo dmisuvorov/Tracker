@@ -34,8 +34,9 @@ final class TrackersPresenter {
     
     func searchTrackersByName(name: String) {
         let currentDay = currentSelectedDate.dayOfWeek()
+        let searchName = name.lowercased()
         let currentTrackers = trackersRepository.getTrackersByFilter { tracker in
-            tracker.day?.contains(currentDay) ?? true && tracker.name.lowercased().contains(name)
+            tracker.day?.contains(currentDay) ?? true && tracker.name.lowercased().contains(searchName)
         }
         if currentTrackers.isEmpty {
             trackersView?.showEmptySearchPlaceholder()
@@ -56,12 +57,14 @@ final class TrackersPresenter {
         let completeTracker = TrackerRecord(id: trackerId, date: currentSelectedDate)
         let isNeedMarkUncomplete =
             trackersRepository.completedTrackers
-                .contains(where: { record in record.id == trackerId })
+                .contains(where: { record in
+                    record.id == trackerId && currentSelectedDate == record.date
+                }
+            )
         
         if isNeedMarkUncomplete {
             trackersRepository.deleteTrackerRecord(trackerRecord: completeTracker)
         } else {
-            
             trackersRepository.addTrackerRecord(trackerRecord: completeTracker)
         }
     }
