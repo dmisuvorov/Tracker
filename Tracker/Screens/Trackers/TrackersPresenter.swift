@@ -9,8 +9,8 @@ import UIKit
 final class TrackersPresenter {
     
     private weak var trackersView: TrackersViewProtocol? = nil
+    private var currentSelectedDate: Date = Date()
     private var currentDate: Date = Date()
-    private var completedTrackers: Set<TrackerRecord> = []
     private let trackersRepository = TrackersRepository.shared
     
     init(trackersView: TrackersViewProtocol) {
@@ -18,7 +18,7 @@ final class TrackersPresenter {
     }
     
     func showCurrentTrackers() {
-        let currentDay = currentDate.dayOfWeek()
+        let currentDay = currentSelectedDate.dayOfWeek()
         let currentTrackers = trackersRepository.getTrackersByFilter { tracker in
             tracker.day?.contains(currentDay) ?? true
         }
@@ -26,37 +26,54 @@ final class TrackersPresenter {
             trackersView?.showEmptyPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(categories: currentTrackers, completedTrackers: completedTrackers)
+        trackersView?.showCurrentTrackers(
+            categories: currentTrackers,
+            completedTrackers: trackersRepository.completedTrackers
+        )
     }
     
     func searchTrackersByName(name: String) {
-        let currentDay = currentDate.dayOfWeek()
+        let currentDay = currentSelectedDate.dayOfWeek()
+        let searchName = name.lowercased()
         let currentTrackers = trackersRepository.getTrackersByFilter { tracker in
-            tracker.day?.contains(currentDay) ?? true && tracker.name.contains(name)
+            tracker.day?.contains(currentDay) ?? true && tracker.name.lowercased().contains(searchName)
         }
         if currentTrackers.isEmpty {
             trackersView?.showEmptySearchPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(categories: currentTrackers, completedTrackers: completedTrackers)
+        trackersView?.showCurrentTrackers(
+            categories: currentTrackers,
+            completedTrackers: trackersRepository.completedTrackers
+        )
     }
     
     func updateCurrentDate(date: Date) {
-        currentDate = date
+        currentSelectedDate = date
     }
     
-    func completeTracker(trackerId: UUID) {
-        let completeTracker = TrackerRecord(id: trackerId, date: currentDate)
-        if completedTrackers.contains(completeTracker) {
-            completedTrackers.remove(completeTracker)
+    func processTrackerClick(trackerId: UUID) {
+        guard currentSelectedDate <= currentDate else { return }
+        let completeTracker = TrackerRecord(id: trackerId, date: currentSelectedDate)
+        let isNeedMarkUncomplete =
+            trackersRepository.completedTrackers
+                .contains(where: { record in
+                    record.id == trackerId && currentSelectedDate == record.date
+                }
+            )
+        
+        if isNeedMarkUncomplete {
+            trackersRepository.deleteTrackerRecord(trackerRecord: completeTracker)
         } else {
-            completedTrackers.insert(completeTracker)
+            trackersRepository.addTrackerRecord(trackerRecord: completeTracker)
         }
     }
     
     func onBindTrackerCell(cell: TrackerViewCell, tracker: Tracker) {
-        let isCurrentTrackerDoneInCurrentDate = completedTrackers.filter { $0.id == tracker.id && $0.date == currentDate }.count > 0
-        let countOfCompleted = completedTrackers.filter { $0.id == tracker.id }.count
+        let isCurrentTrackerDoneInCurrentDate = trackersRepository.completedTrackers
+            .filter { $0.id == tracker.id && $0.date == currentSelectedDate }.count > 0
+        let countOfCompleted = trackersRepository.completedTrackers
+            .filter { $0.id == tracker.id }.count
         let trackerViewModel = TrackerView(
             id: tracker.id,
             name: tracker.name,

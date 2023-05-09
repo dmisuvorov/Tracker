@@ -77,8 +77,10 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
+        searchController.delegate = self
         searchController.searchBar.searchTextField.delegate = self
-        
+        searchController.searchBar.searchTextField
+            .addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
         return searchController
     }()
     
@@ -121,12 +123,26 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         configureUI()
         configureNavigationBar()
         configureObserver()
         
         presenter = TrackersPresenter(trackersView: self)
         applyConditionAndShowTrackers()
+    }
+    
+    @objc
+    func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        searchText = text
+        applyConditionAndShowTrackers()
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     @objc private func onAddButtonClick() {
@@ -167,7 +183,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     func onTrackerCellButtonClick(trackerCell: TrackerViewCell) {
         guard let id = trackerCell.trackerId else { return }
-        presenter?.completeTracker(trackerId: id)
+        presenter?.processTrackerClick(trackerId: id)
         applyConditionAndShowTrackers()
     }
     
@@ -196,7 +212,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         addTrackerObserver = NotificationCenter
             .default
             .addObserver(
-                forName: TrackersRepository.addTrackerNotification,
+                forName: TrackersRepository.changeContentNotification,
                 object: nil,
                 queue: OperationQueue.main
             ) { [weak self] _ in
@@ -233,14 +249,13 @@ extension TrackersViewController: UITextFieldDelegate {
             return true
         }
         let newLength = text.count + string.count - range.length
-        searchText = text
-        applyConditionAndShowTrackers()
         return newLength <= 38
     }
+}
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        searchText = text
+extension TrackersViewController: UISearchControllerDelegate {
+    func didDismissSearchController(_ searchController: UISearchController) {
+        searchText = ""
         applyConditionAndShowTrackers()
     }
 }
