@@ -15,6 +15,12 @@ final class ApplicationFlowRouter {
     }
     
     func start() {
+        let onboardingViewController = OnboardingPageViewController()
+        onboardingViewController.router = self
+        self.window.rootViewController = onboardingViewController
+    }
+    
+    func mainScreen() {
         let trackersViewController = TrackersViewController()
         trackersViewController.router = self
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
