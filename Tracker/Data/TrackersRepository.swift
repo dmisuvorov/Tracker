@@ -10,6 +10,7 @@ final class TrackersRepository {
     static let shared = TrackersRepository()
     static let changeContentNotification = Notification.Name(rawValue: "ChangeContentNotification")
     
+    @Observable
     private (set) var categories: [TrackerCategory] = []
     private (set) var completedTrackers: Set<TrackerRecord> = []
     
@@ -33,10 +34,14 @@ final class TrackersRepository {
         completedTrackers = Set(trackerRecordStore.records)
     }
     
+    func addCategory(categoryName: String) {
+        trackerCategoryStore.addCategory(name: categoryName)
+    }
+    
     func addNewTracker(tracker: Tracker, categoryName: String) {
         let category: TrackerCategory? = trackerCategoryStore.getByName(name: categoryName)
         if category == nil {
-            trackerCategoryStore.addCategory(name: categoryName)
+            addCategory(categoryName: categoryName)
         }
         trackerStore.addTracker(tracker: tracker, category: trackerCategoryStore.getByName(name: categoryName))
     }

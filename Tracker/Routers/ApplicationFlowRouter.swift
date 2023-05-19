@@ -59,7 +59,7 @@ final class ApplicationFlowRouter {
         parentNavigationController.pushViewController(createTrackerViewController, animated: true)
     }
     
-    func confugureNewTrackSchedule(
+    func confugureNewTrackerSchedule(
         selectedSchedule: Set<Day>,
         scheduleDelegate: ScheduleDelegate,
         parentNavigationController: UINavigationController
@@ -68,5 +68,25 @@ final class ApplicationFlowRouter {
         scheduleViewController.scheduleDelegate = scheduleDelegate
         scheduleViewController.selectedDays = selectedSchedule
         parentNavigationController.pushViewController(scheduleViewController, animated: true)
+    }
+    
+    func confugureNewTrackerCategory(
+        selectedCategory: TrackerCategory?,
+        trackerCategoryDelegate: TrackerCategoryDelegate,
+        parentNavigationController: UINavigationController
+    ) {
+        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategory)
+        let trackerCategoryViewController = TrackerCategoryListViewController(viewModel: trackerCategoryViewModel)
+        trackerCategoryViewController.trackerCategoryDelegate = trackerCategoryDelegate
+        trackerCategoryViewController.router = self
+        parentNavigationController.pushViewController(trackerCategoryViewController, animated: true)
+    }
+    
+    func createNewTrackerCategory(
+        trackerCategoryViewModel: TrackerCategoryViewModel,
+        parentNavigationController: UINavigationController
+    ) {
+        let createTrackerCategoryViewController = CreateTrackerCategoryViewController(viewModel: trackerCategoryViewModel)
+        parentNavigationController.pushViewController(createTrackerCategoryViewController, animated: true)
     }
 }
