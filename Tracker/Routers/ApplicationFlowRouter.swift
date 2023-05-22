@@ -7,6 +7,7 @@
 import UIKit
 
 final class ApplicationFlowRouter {
+    private let launchedBeforeKey = "launchedBefore"
     
     private let window: UIWindow
     
@@ -15,6 +16,15 @@ final class ApplicationFlowRouter {
     }
     
     func start() {
+        if launchedBefore() {
+            mainScreen()
+            return
+        }
+        onboarding()
+        UserDefaults.standard.set(true, forKey: launchedBeforeKey)
+    }
+    
+    func onboarding() {
         let onboardingViewController = OnboardingPageViewController()
         onboardingViewController.router = self
         self.window.rootViewController = onboardingViewController
@@ -88,5 +98,9 @@ final class ApplicationFlowRouter {
     ) {
         let createTrackerCategoryViewController = CreateTrackerCategoryViewController(viewModel: trackerCategoryViewModel)
         parentNavigationController.pushViewController(createTrackerCategoryViewController, animated: true)
+    }
+    
+    private func launchedBefore() -> Bool {
+        return UserDefaults.standard.bool(forKey: launchedBeforeKey)
     }
 }
