@@ -104,7 +104,12 @@ extension ScheduleViewController: UITableViewDataSource {
         default: cornerMask = []
         }
         
-        cell.bindCell(day: day.rawValue, isOn: selectedDays.contains(day), corners: cornerMask, isShowDivider: !isLastRow)
+        cell.bindCell(
+            day: day.rawValue,
+            isOn: selectedDays.contains(day),
+            corners: cornerMask,
+            isShowDivider: !isLastRow
+        )
         return cell
     }
 }

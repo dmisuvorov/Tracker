@@ -51,10 +51,17 @@ final class TrackerCategoryViewCell: UITableViewCell {
         configureUI()
     }
     
-    func bindCell(name: String, isSelected: Bool, corners: CACornerMask) {
+    func bindCell(name: String, isSelected: Bool, corners: CACornerMask, isShowDivider: Bool) {
         nameLabel.text = name
         setSelected(isSelected: isSelected)
         backgroundShape.layer.maskedCorners = corners
+        
+        //TODO разобраться почему после добавления категории и возврата на список дивайдеры ведут себя рандомно
+        if !isShowDivider {
+            separatorInset = UIEdgeInsets.init(top: 0, left: CGFloat.greatestFiniteMagnitude, bottom: 0, right: 0)
+        } else {
+            separatorInset = UIEdgeInsets.init(top: 0, left: 32, bottom: 0, right: 32)
+        }
     }
     
     func setSelected(isSelected: Bool) {

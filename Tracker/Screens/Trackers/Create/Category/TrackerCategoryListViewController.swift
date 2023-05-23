@@ -48,7 +48,7 @@ final class TrackerCategoryListViewController: UIViewController {
     private lazy var categoryList: UITableView = {
         let categoryList = UITableView()
         categoryList.register(TrackerCategoryViewCell.self, forCellReuseIdentifier: TrackerCategoryViewCell.identifier)
-        categoryList.separatorColor = UIColor.clear
+        categoryList.separatorColor = UIColor.dsColor(dsColor: DSColor.gray)
         categoryList.layer.masksToBounds = true
         categoryList.delegate = self
         categoryList.dataSource = self
@@ -119,7 +119,7 @@ final class TrackerCategoryListViewController: UIViewController {
             emptyCategoriesPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emptyCategoriesPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        categoryList.tableFooterView = UIView.init()
+        categoryList.tableHeaderView = UIView.init()
     }
 }
 
@@ -131,6 +131,7 @@ extension TrackerCategoryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = categoryList.dequeueReusableCell(withIdentifier: TrackerCategoryViewCell.identifier, for: indexPath) as? TrackerCategoryViewCell else { return .init() }
         let category = viewModel.categories[indexPath.row]
+        let isLastRow = indexPath.row == viewModel.categories.count - 1
         let cornerMask: CACornerMask
         
         if viewModel.categories.count == 1 {
@@ -143,7 +144,12 @@ extension TrackerCategoryListViewController: UITableViewDataSource {
             }
         }
         
-        cell.bindCell(name: category.name, isSelected: category == viewModel.selectedCategory, corners: cornerMask)
+        cell.bindCell(
+            name: category.name,
+            isSelected: category == viewModel.selectedCategory,
+            corners: cornerMask,
+            isShowDivider: !isLastRow
+        )
         return cell
     }
 }
