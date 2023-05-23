@@ -47,6 +47,10 @@ final class CreateTrackerCategoryViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("There is no storyboard")
+    }
+    
     @objc
     private func onTrackerCategoryChanged(_ sender: UITextInput) {
         viewModel.onChangeNewTrackerCategoryName(currentNewCategoryName: trackerCategoryTextField.text)
@@ -56,10 +60,6 @@ final class CreateTrackerCategoryViewController: UIViewController {
     private func onCreateButtonClick() {
         viewModel.onCreateNewCategoryButtonClick()
         navigationController?.popViewController(animated: true)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("There is no storyboard")
     }
     
     override func viewDidLoad() {
