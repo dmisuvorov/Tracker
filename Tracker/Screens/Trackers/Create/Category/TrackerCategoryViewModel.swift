@@ -18,21 +18,26 @@ final class TrackerCategoryViewModel {
     @Observable
     private (set) var currentNewCategoryName: String = ""
     
+    @Observable
+    private (set) var isPlaceholderViewHidden = true
+    
     init(selectedCategory: TrackerCategory? = nil) {
         self.selectedCategory = selectedCategory
     }
     
     func onBindCategoryList() {
         categories = trackersRepository.categories
+        checkVisibilityPlaceholder()
         trackersRepository.$categories.bind { [weak self] trackerCategories in
             self?.categories = trackerCategories
+            self?.checkVisibilityPlaceholder()
         }
     }
     
     func onSelectNewCategory(category: TrackerCategory?) {
         guard let category = category else { return }
         
-        self.selectedCategory = category
+        selectedCategory = category
     }
     
     func onChangeNewTrackerCategoryName(currentNewCategoryName: String?) {
@@ -45,5 +50,13 @@ final class TrackerCategoryViewModel {
         if !currentNewCategoryName.isEmpty {
             trackersRepository.addCategory(categoryName: currentNewCategoryName)
         }
+    }
+    
+    private func checkVisibilityPlaceholder() {
+        if categories.isEmpty {
+            isPlaceholderViewHidden = false
+            return
+        }
+        isPlaceholderViewHidden = true
     }
 }

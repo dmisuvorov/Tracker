@@ -13,10 +13,11 @@ final class TrackerCategoryListViewController: UIViewController {
     
     private let viewModel: TrackerCategoryViewModel
     
-    private lazy var emptyTrackersPlaceholderView: UIView = {
+    private lazy var emptyCategoriesPlaceholderView: UIView = {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
+        placeHolderLabel.numberOfLines = 2
         placeHolderLabel.text = "Привычки и события можно\nобъединить по смыслу"
         let placeHolderImage = UIImageView(image: UIImage(named: "EmptyTrackersIll"))
         
@@ -79,12 +80,11 @@ final class TrackerCategoryListViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.$categories.bind { [weak self] trackerCategories in
-            if trackerCategories.isEmpty {
-                self?.emptyTrackersPlaceholderView.isHidden = false
-                return
-            }
-            self?.emptyTrackersPlaceholderView.isHidden = true
             self?.categoryList.reloadData()
+        }
+        
+        viewModel.$isPlaceholderViewHidden.bind { [weak self] isHidden in
+            self?.emptyCategoriesPlaceholderView.isHidden = isHidden
         }
         
         viewModel.$selectedCategory.bind { [weak self] selectedCategory in
@@ -103,6 +103,7 @@ final class TrackerCategoryListViewController: UIViewController {
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
         view.addSubview(categoryList)
         view.addSubview(addButton)
+        view.addSubview(emptyCategoriesPlaceholderView)
         
         NSLayoutConstraint.activate([
             categoryList.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -113,7 +114,10 @@ final class TrackerCategoryListViewController: UIViewController {
             addButton.heightAnchor.constraint(equalToConstant: 60),
             addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             addButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            emptyCategoriesPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCategoriesPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         categoryList.tableFooterView = UIView.init()
     }
