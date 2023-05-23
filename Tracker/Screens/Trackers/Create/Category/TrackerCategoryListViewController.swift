@@ -133,10 +133,14 @@ extension TrackerCategoryListViewController: UITableViewDataSource {
         let category = viewModel.categories[indexPath.row]
         let cornerMask: CACornerMask
         
-        switch (indexPath.row) {
-        case 0: cornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case viewModel.categories.count - 1: cornerMask = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        default: cornerMask = []
+        if viewModel.categories.count == 1 {
+            cornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        } else {
+            switch (indexPath.row) {
+            case 0: cornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            case viewModel.categories.count - 1: cornerMask = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            default: cornerMask = []
+            }
         }
         
         cell.bindCell(name: category.name, isSelected: category == viewModel.selectedCategory, corners: cornerMask)
