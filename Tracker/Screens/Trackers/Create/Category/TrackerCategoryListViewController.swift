@@ -8,7 +8,7 @@
 import UIKit
 
 final class TrackerCategoryListViewController: UIViewController {
-    var trackerCategoryDelegate: TrackerCategoryDelegate? = nil
+    weak var trackerCategoryDelegate: TrackerCategoryDelegate? = nil
     var router: ApplicationFlowRouter? = nil
     
     private let viewModel: TrackerCategoryViewModel
