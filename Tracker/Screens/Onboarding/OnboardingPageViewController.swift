@@ -10,9 +10,9 @@ import UIKit
 final class OnboardingPageViewController: UIPageViewController {
     var router: ApplicationFlowRouter? = nil
     
-    private var pages: [UIViewController] = [
-        OnboardingViewController(model: OnboardingModel(text: "Отслеживайте только\nто, что хотите", image: "Onboarding1")),
-        OnboardingViewController(model: OnboardingModel(text: "Даже если это\nне литры воды и йога", image: "Onboarding2")),
+    private var pages: [OnboardingModel] = [
+        OnboardingModel(text: "Отслеживайте только\nто, что хотите", image: "Onboarding1"),
+        OnboardingModel(text: "Даже если это\nне литры воды и йога", image: "Onboarding2"),
     ]
 
     
@@ -69,9 +69,9 @@ final class OnboardingPageViewController: UIPageViewController {
         dataSource = self
         delegate = self
         
-        if let first = pages.first {
-            setViewControllers([first], direction: UIPageViewController.NavigationDirection.forward, animated: true, completion: nil)
-        }
+        guard let firstOnboardingModel = pages.first else { return }
+        let firstVc = OnboardingViewController(model: firstOnboardingModel, index: 0)
+        setViewControllers([firstVc], direction: UIPageViewController.NavigationDirection.forward, animated: true, completion: nil)
     }
     
     private func configureUI() {
@@ -92,24 +92,27 @@ final class OnboardingPageViewController: UIPageViewController {
 
 extension OnboardingPageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let currentPageIndex = pages.firstIndex(of: viewController) else { return nil }
-        let pageBefore = pages[(currentPageIndex - 1 + pages.count) % pages.count]
-        return pageBefore
+        guard let currentVC = viewController as? OnboardingViewController else { return nil }
+        let currentIndex = currentVC.pageIndex
+        let indexBefore = (currentIndex - 1 + pages.count) % pages.count
+        let pageBefore = pages[indexBefore]
+        return OnboardingViewController(model: pageBefore, index: indexBefore)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let currentPageIndex = pages.firstIndex(of: viewController) else { return nil }
-        let pageAfter = pages[(currentPageIndex + 1) % pages.count]
-        return pageAfter
+        guard let currentVC = viewController as? OnboardingViewController else { return nil }
+        let currentIndex = currentVC.pageIndex
+        let indexAfter = (currentIndex + 1) % pages.count
+        let pageAfter = pages[indexAfter]
+        return OnboardingViewController(model: pageAfter, index: indexAfter)
     }
 }
 
 extension OnboardingPageViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-
-        if let currentViewController = pageViewController.viewControllers?.first,
-           let currentIndex = pages.firstIndex(of: currentViewController) {
-            pageControl.currentPage = currentIndex
+        
+        if let currentViewController = pageViewController.viewControllers?.first as? OnboardingViewController {
+            pageControl.currentPage = currentViewController.pageIndex
         }
     }
 }

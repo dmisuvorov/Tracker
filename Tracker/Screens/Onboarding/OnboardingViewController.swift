@@ -8,6 +8,8 @@
 import UIKit
 
 final class OnboardingViewController: UIViewController {
+    var pageIndex: Int
+    
     private let text: String
     private let image: UIImage
     
@@ -28,7 +30,8 @@ final class OnboardingViewController: UIViewController {
         return textLabel
     }()
     
-    init(model: OnboardingModel) {
+    init(model: OnboardingModel, index: Int) {
+        self.pageIndex = index
         self.text = model.text
         self.image = UIImage(named: model.image) ?? UIImage.checkmark
         super.init(nibName: nil, bundle: nil)
