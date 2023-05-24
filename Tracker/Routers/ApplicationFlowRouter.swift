@@ -7,6 +7,7 @@
 import UIKit
 
 final class ApplicationFlowRouter {
+    private let launchedBeforeKey = "launchedBefore"
     
     private let window: UIWindow
     
@@ -15,6 +16,21 @@ final class ApplicationFlowRouter {
     }
     
     func start() {
+        if launchedBefore() {
+            mainScreen()
+            return
+        }
+        onboarding()
+        UserDefaults.standard.set(true, forKey: launchedBeforeKey)
+    }
+    
+    func onboarding() {
+        let onboardingViewController = OnboardingPageViewController()
+        onboardingViewController.router = self
+        self.window.rootViewController = onboardingViewController
+    }
+    
+    func mainScreen() {
         let trackersViewController = TrackersViewController()
         trackersViewController.router = self
         let trackersNavigationController = UINavigationController(rootViewController: trackersViewController)
@@ -53,7 +69,7 @@ final class ApplicationFlowRouter {
         parentNavigationController.pushViewController(createTrackerViewController, animated: true)
     }
     
-    func confugureNewTrackSchedule(
+    func confugureNewTrackerSchedule(
         selectedSchedule: Set<Day>,
         scheduleDelegate: ScheduleDelegate,
         parentNavigationController: UINavigationController
@@ -62,5 +78,29 @@ final class ApplicationFlowRouter {
         scheduleViewController.scheduleDelegate = scheduleDelegate
         scheduleViewController.selectedDays = selectedSchedule
         parentNavigationController.pushViewController(scheduleViewController, animated: true)
+    }
+    
+    func confugureNewTrackerCategory(
+        selectedCategory: TrackerCategory?,
+        trackerCategoryDelegate: TrackerCategoryDelegate,
+        parentNavigationController: UINavigationController
+    ) {
+        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategory)
+        let trackerCategoryViewController = TrackerCategoryListViewController(viewModel: trackerCategoryViewModel)
+        trackerCategoryViewController.trackerCategoryDelegate = trackerCategoryDelegate
+        trackerCategoryViewController.router = self
+        parentNavigationController.pushViewController(trackerCategoryViewController, animated: true)
+    }
+    
+    func createNewTrackerCategory(
+        trackerCategoryViewModel: TrackerCategoryViewModel,
+        parentNavigationController: UINavigationController
+    ) {
+        let createTrackerCategoryViewController = CreateTrackerCategoryViewController(viewModel: trackerCategoryViewModel)
+        parentNavigationController.pushViewController(createTrackerCategoryViewController, animated: true)
+    }
+    
+    private func launchedBefore() -> Bool {
+        return UserDefaults.standard.bool(forKey: launchedBeforeKey)
     }
 }

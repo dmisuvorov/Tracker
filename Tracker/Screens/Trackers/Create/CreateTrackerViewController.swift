@@ -17,6 +17,7 @@ final class CreateTrackerViewController : UIViewController {
     var router: ApplicationFlowRouter? = nil
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
+    private var selectedCategory: TrackerCategory? = nil { didSet { updateCreateButtonStatus() } }
     private var selectedSchedule: Set<Day> = [] { didSet { updateCreateButtonStatus() } }
     private var selectedEmoji: String = "" { didSet { updateCreateButtonStatus() } }
     private var selectedColor: UIColor? = nil { didSet { updateCreateButtonStatus() } }
@@ -26,8 +27,6 @@ final class CreateTrackerViewController : UIViewController {
     
     private let emojiCollectionTag = 100
     private let colorsCollectionTag = 101
-    
-    private let defaultCategory = "По умолчанию"
     
     private lazy var scrollContainerView: UIScrollView = {
         let scrollContainerView = UIScrollView()
@@ -60,7 +59,16 @@ final class CreateTrackerViewController : UIViewController {
     }()
     
     private lazy var categoryTrackerCell: TrackerConfigCell = {
-        let categoryTrackerCell = TrackerConfigCell(title: "Категория", subtitle: defaultCategory)
+        let categoryTrackerCell = TrackerConfigCell(title: "Категория", onClick: { [weak self] in
+            guard let self = self, let navigationController = self.navigationController else { return }
+            
+            self.router?
+                .confugureNewTrackerCategory(
+                    selectedCategory: self.selectedCategory,
+                    trackerCategoryDelegate: self,
+                    parentNavigationController: navigationController
+                )
+        })
         categoryTrackerCell.translatesAutoresizingMaskIntoConstraints = false
         return categoryTrackerCell
     }()
@@ -70,7 +78,7 @@ final class CreateTrackerViewController : UIViewController {
             guard let self = self, let navigationController = self.navigationController else { return }
             
             self.router?
-                .confugureNewTrackSchedule(
+                .confugureNewTrackerSchedule(
                     selectedSchedule: self.selectedSchedule,
                     scheduleDelegate: self,
                     parentNavigationController: navigationController
@@ -180,6 +188,7 @@ final class CreateTrackerViewController : UIViewController {
     private func onCreateButtonClick() {
         guard let currentTrackerName = currentTrackerName,
               let selectedColor = selectedColor,
+              let selectedCategory = selectedCategory,
               !selectedEmoji.isEmpty else { return }
         
         let newTracker = Tracker(
@@ -189,7 +198,7 @@ final class CreateTrackerViewController : UIViewController {
             emoji: selectedEmoji,
             day: trackerType == TrackerType.irregularEvent ? nil : selectedSchedule
         )
-        trackersRepository.addNewTracker(tracker: newTracker, categoryName: defaultCategory)
+        trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory.name)
         dismiss(animated: true)
     }
     
@@ -324,11 +333,12 @@ final class CreateTrackerViewController : UIViewController {
     
     private func updateCreateButtonStatus() {
         let isValidTrackerName = currentTrackerName?.isEmpty == false
+        let isValidTrackerCategory = selectedCategory != nil
         let isValidSchedule = trackerType == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
         let isValidEmoji = selectedEmoji.isEmpty == false
         let isValidColor = selectedColor != nil
         
-        let isEnabledCreateButton = isValidTrackerName && isValidSchedule && isValidEmoji && isValidColor
+        let isEnabledCreateButton = isValidTrackerName && isValidTrackerCategory && isValidSchedule && isValidEmoji && isValidColor
         if isEnabledCreateButton {
             createButton.isEnabled = true
             createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
@@ -343,6 +353,13 @@ extension CreateTrackerViewController : ScheduleDelegate {
     func onSelectSchedule(selectedDays: Set<Day>) {
         selectedSchedule = selectedDays
         scheduleTrackerCell.updateSubtitle(subtitle: selectedSchedule.toShortDescription())
+    }
+}
+
+extension CreateTrackerViewController : TrackerCategoryDelegate {
+    func onSelectCategory(selectedCategory: TrackerCategory) {
+        self.selectedCategory = selectedCategory
+        categoryTrackerCell.updateSubtitle(subtitle: selectedCategory.name)
     }
 }
 
