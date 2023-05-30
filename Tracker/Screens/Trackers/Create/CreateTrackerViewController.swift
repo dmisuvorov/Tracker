@@ -196,6 +196,7 @@ final class CreateTrackerViewController : UIViewController {
             name: currentTrackerName,
             color: selectedColor.colorToHexString(),
             emoji: selectedEmoji,
+            isPinned: false,
             day: trackerType == TrackerType.irregularEvent ? nil : selectedSchedule
         )
         trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory.name)

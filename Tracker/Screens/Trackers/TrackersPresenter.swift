@@ -26,10 +26,9 @@ final class TrackersPresenter {
             trackersView?.showEmptyPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(
-            categories: currentTrackers,
-            completedTrackers: trackersRepository.completedTrackers
-        )
+        let resultTrackers = sortTrackersByPinStatus(currentTrackers: currentTrackers)
+        trackersView?.showCurrentTrackers(categories: resultTrackers)
+        
     }
     
     func searchTrackersByName(name: String) {
@@ -42,14 +41,25 @@ final class TrackersPresenter {
             trackersView?.showEmptySearchPlaceholder()
             return
         }
-        trackersView?.showCurrentTrackers(
-            categories: currentTrackers,
-            completedTrackers: trackersRepository.completedTrackers
-        )
+        trackersView?.showCurrentTrackers(categories: currentTrackers)
     }
     
     func updateCurrentDate(date: Date) {
         currentSelectedDate = date
+    }
+    
+    func pinTracker(trackerId: UUID) {
+        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId),
+                tracker.isPinned == false
+        else { return }
+        trackersRepository.pinTracker(tracker: tracker)
+    }
+    
+    func unpinTracker(trackerId: UUID) {
+        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId),
+                tracker.isPinned == true
+        else { return }
+        trackersRepository.unpinTracker(tracker: tracker)
     }
     
     func processTrackerClick(trackerId: UUID) {
@@ -79,9 +89,31 @@ final class TrackersPresenter {
             name: tracker.name,
             color: tracker.color,
             emoji: tracker.emoji,
+            isPinned: tracker.isPinned,
             daysCompleted: "\(countOfCompleted) \(countOfCompleted.daysString())",
             isDoneInCurrentDate: isCurrentTrackerDoneInCurrentDate
         )
         trackersView?.bindTrackerViewCell(cell: cell, trackerView: trackerViewModel)
+    }
+    
+    private func sortTrackersByPinStatus(currentTrackers: [TrackerCategory]) -> [TrackerCategory] {
+        var pinnedTrackers: [Tracker] = []
+        var unpinnedCategories: [TrackerCategory] = []
+        
+        for category in currentTrackers {
+            let (pinnedTrackerInCategory, unpinnedTrackers) = category.trackers.partitioned(by: { $0.isPinned })
+            if !pinnedTrackerInCategory.isEmpty {
+                pinnedTrackers.append(contentsOf: pinnedTrackerInCategory)
+            }
+            if !unpinnedTrackers.isEmpty {
+                unpinnedCategories.append(TrackerCategory(name: category.name, trackers: unpinnedTrackers))
+            }
+        }
+        if pinnedTrackers.isEmpty {
+            return unpinnedCategories
+        }
+        let pinnedCategory = TrackerCategory(name: "Закрепленные", trackers: pinnedTrackers)
+        let result = [pinnedCategory] + unpinnedCategories
+        return result
     }
 }

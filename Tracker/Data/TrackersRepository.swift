@@ -46,6 +46,27 @@ final class TrackersRepository {
         trackerStore.addTracker(tracker: tracker, category: trackerCategoryStore.getByName(name: categoryName))
     }
     
+    func pinTracker(tracker: Tracker) {
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.isPinned = true
+        }
+    }
+    
+    func unpinTracker(tracker: Tracker) {
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.isPinned = false
+        }
+    }
+    
+    func getTrackerByIdOrNil(trackerId: UUID) -> Tracker? {
+        let trackerCategories = getTrackersByFilter { tracker in tracker.id == trackerId }
+        if trackerCategories.isEmpty {
+            return nil
+        }
+        
+        return trackerCategories.first?.trackers.first ?? nil
+    }
+    
     func getTrackersByFilter(filter: (Tracker) -> Bool) -> [TrackerCategory] {
         var resultCategories: [TrackerCategory] = []
         categories.forEach { category in

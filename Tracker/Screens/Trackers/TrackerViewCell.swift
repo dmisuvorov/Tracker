@@ -11,6 +11,7 @@ final class TrackerViewCell : UICollectionViewCell {
     weak var delegate: TrackersViewProtocol?
     static let identifier = "TrackerCell"
     
+    private (set) var isPinned: Bool = false
     private (set) var trackerId: UUID? = nil
     
     private lazy var addButton: UIButton = {
@@ -116,6 +117,7 @@ final class TrackerViewCell : UICollectionViewCell {
     
     func bindCell(tracker: TrackerView) {
         trackerId = tracker.id
+        isPinned = tracker.isPinned
         titleLabel.text = tracker.name
         dayLabel.text = tracker.daysCompleted
         emojiLabel.text = tracker.emoji

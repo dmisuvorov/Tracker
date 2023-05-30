@@ -12,7 +12,7 @@ protocol TrackersViewProtocol: AnyObject{
     
     func showEmptySearchPlaceholder()
     
-    func showCurrentTrackers(categories: [TrackerCategory], completedTrackers: Set<TrackerRecord>)
+    func showCurrentTrackers(categories: [TrackerCategory])
     
     func bindTrackerViewCell(cell: TrackerViewCell, trackerView: TrackerView)
     
@@ -24,7 +24,6 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     var router: ApplicationFlowRouter? = nil
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
-    private var completedTrackers: Set<TrackerRecord> = []
     private var searchText: String = ""
     private var presenter: TrackersPresenter? = nil
     private var addTrackerObserver: NSObjectProtocol?
@@ -166,13 +165,12 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         emptyTrackersPlaceholderView.isHidden = true
     }
     
-    func showCurrentTrackers(categories: [TrackerCategory], completedTrackers: Set<TrackerRecord>) {
+    func showCurrentTrackers(categories: [TrackerCategory]) {
         collectionView.isHidden = false
         emptySearchTrackersPlaceholderView.isHidden = true
         emptyTrackersPlaceholderView.isHidden = true
         
         self.visibleCategories = categories
-        self.completedTrackers = completedTrackers
         collectionView.reloadData()
     }
     
@@ -278,6 +276,39 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return nil }
+            
+            let currentTracker = self.visibleCategories[indexPath.section].trackers[indexPath.row]
+            let pinOrUnpinAction: UIAction
+            if currentTracker.isPinned {
+                pinOrUnpinAction = UIAction(title: "Открепить") { [weak self] _ in
+                    guard let self else { return }
+                    self.presenter?.unpinTracker(trackerId: currentTracker.id)
+                }
+            } else {
+                pinOrUnpinAction = UIAction(title: "Закрепить") { [weak self] _ in
+                    guard let self else { return }
+                    self.presenter?.pinTracker(trackerId: currentTracker.id)
+                }
+            }
+            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+                guard let self else { return }
+                
+            }
+            let removeAction = UIAction(title: "Удалить") { [weak self] _ in
+                guard let self else { return }
+
+            }
+
+            return UIMenu(children: [pinOrUnpinAction, editAction, removeAction])
+        }
     }
 }
 
