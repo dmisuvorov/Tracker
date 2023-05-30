@@ -7,13 +7,14 @@
 import UIKit
 
 final class TrackerDetailsViewController : UIViewController {
-    var trackerType: TrackerType? {
+    var trackerDetailsModel: TrackerDetailsView? {
         didSet {
             guard isViewLoaded else { return }
-            setTitle(trackerType)
+            setTitle(trackerDetailsModel?.type)
             configureTrackerConfig()
         }
     }
+    
     var router: ApplicationFlowRouter? = nil
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
@@ -197,7 +198,7 @@ final class TrackerDetailsViewController : UIViewController {
             color: selectedColor.colorToHexString(),
             emoji: selectedEmoji,
             isPinned: false,
-            day: trackerType == TrackerType.irregularEvent ? nil : selectedSchedule
+            day: trackerDetailsModel?.type == TrackerType.irregularEvent ? nil : selectedSchedule
         )
         trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory.name)
         dismiss(animated: true)
@@ -206,7 +207,7 @@ final class TrackerDetailsViewController : UIViewController {
     private func configureUI() {
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
         navigationItem.hidesBackButton = true
-        setTitle(trackerType)
+        setTitle(trackerDetailsModel?.type)
         configureScroll()
         configureTrackerNameTextField()
         configureTrackerConfig()
@@ -248,7 +249,7 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     private func configureTrackerConfig() {
-        if trackerType == TrackerType.habit {
+        if trackerDetailsModel?.type == TrackerType.habit {
             configureHabitTracker()
             return
         }
@@ -288,7 +289,7 @@ final class TrackerDetailsViewController : UIViewController {
         scrollContainerView.addSubview(emojiTitleLabel)
         scrollContainerView.addSubview(emojiCollectionView)
         let topAnchorConstraintTo: NSLayoutYAxisAnchor
-        if trackerType == TrackerType.habit {
+        if trackerDetailsModel?.type == TrackerType.habit {
             topAnchorConstraintTo = scheduleTrackerCell.bottomAnchor
         } else {
             topAnchorConstraintTo = categoryTrackerCell.bottomAnchor
@@ -335,7 +336,7 @@ final class TrackerDetailsViewController : UIViewController {
     private func updateCreateButtonStatus() {
         let isValidTrackerName = currentTrackerName?.isEmpty == false
         let isValidTrackerCategory = selectedCategory != nil
-        let isValidSchedule = trackerType == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
+        let isValidSchedule = trackerDetailsModel?.type == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
         let isValidEmoji = selectedEmoji.isEmpty == false
         let isValidColor = selectedColor != nil
         

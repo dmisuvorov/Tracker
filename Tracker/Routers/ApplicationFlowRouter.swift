@@ -64,7 +64,7 @@ final class ApplicationFlowRouter {
     
     func createNewTrackSecondStep(trackerType: TrackerType, parentNavigationController: UINavigationController) {
         let trackerDetailsViewController = TrackerDetailsViewController()
-        trackerDetailsViewController.trackerType = trackerType
+        trackerDetailsViewController.trackerDetailsModel = TrackerDetailsView(flow: TrackerDetailsFlow.create, type: trackerType)
         trackerDetailsViewController.router = self
         parentNavigationController.pushViewController(trackerDetailsViewController, animated: true)
     }
