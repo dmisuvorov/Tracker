@@ -6,7 +6,7 @@
 //
 import UIKit
 
-final class CreateTrackerViewController : UIViewController {
+final class TrackerDetailsViewController : UIViewController {
     var trackerType: TrackerType? {
         didSet {
             guard isViewLoaded else { return }
@@ -350,21 +350,21 @@ final class CreateTrackerViewController : UIViewController {
     }
 }
 
-extension CreateTrackerViewController : ScheduleDelegate {
+extension TrackerDetailsViewController : ScheduleDelegate {
     func onSelectSchedule(selectedDays: Set<Day>) {
         selectedSchedule = selectedDays
         scheduleTrackerCell.updateSubtitle(subtitle: selectedSchedule.toShortDescription())
     }
 }
 
-extension CreateTrackerViewController : TrackerCategoryDelegate {
+extension TrackerDetailsViewController : TrackerCategoryDelegate {
     func onSelectCategory(selectedCategory: TrackerCategory) {
         self.selectedCategory = selectedCategory
         categoryTrackerCell.updateSubtitle(subtitle: selectedCategory.name)
     }
 }
 
-extension CreateTrackerViewController: UICollectionViewDataSource {
+extension TrackerDetailsViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == emojiCollectionTag {
@@ -398,7 +398,7 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
+extension TrackerDetailsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -425,7 +425,7 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CreateTrackerViewController: UICollectionViewDelegate {
+extension TrackerDetailsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == emojiCollectionTag {
