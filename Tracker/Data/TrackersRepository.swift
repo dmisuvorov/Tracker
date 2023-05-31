@@ -14,6 +14,8 @@ final class TrackersRepository {
     private (set) var categories: [TrackerCategory] = []
     private (set) var completedTrackers: Set<TrackerRecord> = []
     
+    private let encoder = JSONEncoder()
+    
     private lazy var trackerStore: TrackerStore = {
         let trackerStore = TrackerStore(storeDelegate: self)
         return trackerStore
@@ -44,6 +46,22 @@ final class TrackersRepository {
             addCategory(categoryName: categoryName)
         }
         trackerStore.addTracker(tracker: tracker, category: trackerCategoryStore.getByName(name: categoryName))
+    }
+    
+    func updateCurrentTracker(tracker: Tracker, categoryName: String) {
+        let category: TrackerCategory? = trackerCategoryStore.getByName(name: categoryName)
+        if category == nil {
+            addCategory(categoryName: categoryName)
+        }
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.name = tracker.name
+            trackerCD.category = trackerCategoryStore.getByName(name: categoryName)
+            trackerCD.emoji = tracker.emoji
+            trackerCD.color = tracker.color
+            if let schedule = tracker.day {
+                trackerCD.schedule = try? encoder.encode(schedule)
+            }
+        }
     }
     
     func pinTracker(tracker: Tracker) {

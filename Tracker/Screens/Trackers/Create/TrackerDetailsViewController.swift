@@ -152,7 +152,7 @@ final class TrackerDetailsViewController : UIViewController {
         createButton.setTitle("Создать", for: UIControl.State.normal)
         createButton.translatesAutoresizingMaskIntoConstraints = true
         createButton.isEnabled = false
-        createButton.addTarget(self, action: #selector(onCreateButtonClick), for: UIControl.Event.touchUpInside)
+        createButton.addTarget(self, action: #selector(onStoreButtonClick), for: UIControl.Event.touchUpInside)
         return createButton
     }()
     
@@ -240,22 +240,51 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     @objc
-    private func onCreateButtonClick() {
+    private func onStoreButtonClick() {
         guard let currentTrackerName = currentTrackerName,
               let selectedColor = selectedColor,
               let selectedCategory = selectedCategory,
               !selectedEmoji.isEmpty else { return }
         
+        if trackerDetailsModel?.flow == TrackerDetailsFlow.create {
+            createNewTracker(
+                name: currentTrackerName,
+                color: selectedColor,
+                categoryName: selectedCategory
+            )
+        } else if let initialTracker = trackerDetailsModel?.trackerInfo.trackerDetails {
+            updateCurrentTracker(
+                initialTracker: initialTracker,
+                name: currentTrackerName,
+                color: selectedColor,
+                categoryName: selectedCategory
+            )
+        }
+        dismiss(animated: true)
+    }
+    
+    private func createNewTracker(name: String, color: String, categoryName: String) {
         let newTracker = Tracker(
             id: UUID(),
-            name: currentTrackerName,
-            color: selectedColor,
+            name: name,
+            color: color,
             emoji: selectedEmoji,
             isPinned: false,
             day: trackerDetailsModel?.trackerInfo.type == TrackerType.irregularEvent ? nil : selectedSchedule
         )
-        trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory)
-        dismiss(animated: true)
+        trackersRepository.addNewTracker(tracker: newTracker, categoryName: categoryName)
+    }
+    
+    private func updateCurrentTracker(initialTracker: Tracker, name: String, color: String, categoryName: String) {
+        let newTracker = Tracker(
+            id: initialTracker.id,
+            name: name,
+            color: color,
+            emoji: selectedEmoji,
+            isPinned: initialTracker.isPinned,
+            day: trackerDetailsModel?.trackerInfo.type == TrackerType.irregularEvent ? nil : selectedSchedule
+        )
+        trackersRepository.updateCurrentTracker(tracker: newTracker, categoryName: categoryName)
     }
     
     private func configureUI() {
@@ -373,8 +402,10 @@ final class TrackerDetailsViewController : UIViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             let emojiIndex = IndexPath(row: self.emojiRepository.findEmojiIndex(emoji: trackerDetails.emoji) ?? 0, section: 0)
+            self.emojiCollectionView.selectItem(at: emojiIndex, animated: true, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
             self.collectionView(self.emojiCollectionView, didSelectItemAt: emojiIndex)
             let colorIndex = IndexPath(row: self.colorRepository.findColorIndex(color: trackerDetails.color) ?? 0, section: 0)
+            self.colorCollectionView.selectItem(at: colorIndex, animated: true, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
             self.collectionView(self.colorCollectionView, didSelectItemAt: colorIndex)
         }
     }
