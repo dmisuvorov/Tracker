@@ -76,6 +76,10 @@ final class TrackersRepository {
         }
     }
     
+    func deleteTracker(tracker: Tracker) {
+        trackerStore.deleteTracker(tracker: tracker)
+    }
+    
     func getTrackerByIdOrNil(trackerId: UUID) -> Tracker? {
         let trackerCategories = getTrackersByFilter { tracker in tracker.id == trackerId }
         if trackerCategories.isEmpty {

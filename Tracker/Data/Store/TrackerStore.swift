@@ -56,6 +56,16 @@ final class TrackerStore: Store {
         update(tracker)
         save()
     }
+    
+    func deleteTracker(tracker: Tracker) {
+        let request = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        guard let trackers = try? context.fetch(request) else { return }
+        for tracker in trackers {
+            context.delete(tracker)
+        }
+        save()
+    }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {

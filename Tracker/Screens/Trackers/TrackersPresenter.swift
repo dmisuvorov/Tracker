@@ -121,4 +121,9 @@ final class TrackersPresenter {
         let result = [pinnedCategory] + unpinnedCategories
         return result
     }
+    
+    func removeTracker(trackerId: UUID) {
+        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
+        trackersRepository.deleteTracker(tracker: tracker)
+    }
 }

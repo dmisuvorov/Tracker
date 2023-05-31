@@ -308,13 +308,25 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                 guard let self else { return }
                 self.presenter?.editTracker(trackerId: currentTracker.id)
             }
-            let removeAction = UIAction(title: "Удалить") { [weak self] _ in
+            let removeAction = UIAction(title: "Удалить", attributes: UIMenuElement.Attributes.destructive) { [weak self] _ in
                 guard let self else { return }
-
+                self.showRemoveTrackerAlert(removedTracker: currentTracker)
             }
 
             return UIMenu(children: [pinOrUnpinAction, editAction, removeAction])
         }
+    }
+    
+    private func showRemoveTrackerAlert(removedTracker: Tracker) {
+        let alertController = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
+        let removeAction = UIAlertAction(title: "Удалить", style: UIAlertAction.Style.destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.presenter?.removeTracker(trackerId: removedTracker.id)
+        }
+        let cancelAction = UIAlertAction(title: "Отменить", style: UIAlertAction.Style.cancel)
+        alertController.addAction(removeAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true)
     }
 }
 
