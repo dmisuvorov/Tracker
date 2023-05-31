@@ -62,6 +62,13 @@ final class TrackersPresenter {
         trackersRepository.unpinTracker(tracker: tracker)
     }
     
+    func editTracker(trackerId: UUID) {
+        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
+        //TODO: - расширить модель TrackerDetailsFlow c передачей всех параметров
+        let trackerDetailsView = TrackerDetailsView(flow: TrackerDetailsFlow.edit, type: TrackerType.habit)
+        trackersView?.startEditTracker(trackerDetailsView: trackerDetailsView)
+    }
+    
     func processTrackerClick(trackerId: UUID) {
         guard currentSelectedDate <= currentDate else { return }
         let completeTracker = TrackerRecord(id: trackerId, date: currentSelectedDate)

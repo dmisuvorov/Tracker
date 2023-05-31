@@ -10,7 +10,7 @@ final class TrackerDetailsViewController : UIViewController {
     var trackerDetailsModel: TrackerDetailsView? {
         didSet {
             guard isViewLoaded else { return }
-            setTitle(trackerDetailsModel?.type)
+            setTitle(trackerDetailsModel)
             configureTrackerConfig()
         }
     }
@@ -38,6 +38,45 @@ final class TrackerDetailsViewController : UIViewController {
         scrollContainerView.showsHorizontalScrollIndicator = false
         scrollContainerView.translatesAutoresizingMaskIntoConstraints = false
         return scrollContainerView
+    }()
+    
+    private lazy var counterHStack: UIStackView = {
+        let counterHStack = UIStackView()
+        counterHStack.axis = NSLayoutConstraint.Axis.horizontal
+        counterHStack.distribution = UIStackView.Distribution.fill
+        counterHStack.spacing = 24
+        counterHStack.translatesAutoresizingMaskIntoConstraints = false
+        return counterHStack
+    }()
+    
+    private lazy var decreaseButton: UIButton = {
+        let decreaseButton = UIButton()
+        decreaseButton.setImage(UIImage(systemName: "minus"), for: .normal)
+        decreaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        decreaseButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
+        decreaseButton.layer.masksToBounds = true
+        decreaseButton.layer.cornerRadius = 17
+        decreaseButton.translatesAutoresizingMaskIntoConstraints = false
+        return decreaseButton
+    }()
+    
+    private lazy var counterLabel: UILabel = {
+        let counterLabel = UILabel()
+        counterLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.bold)
+        counterLabel.text = "0 дней"
+        counterLabel.translatesAutoresizingMaskIntoConstraints = false
+        return counterLabel
+    }()
+    
+    private lazy var increaseButton: UIButton = {
+        let increaseButton = UIButton()
+        increaseButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        increaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        increaseButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
+        increaseButton.layer.masksToBounds = true
+        increaseButton.layer.cornerRadius = 17
+        increaseButton.translatesAutoresizingMaskIntoConstraints = false
+        return increaseButton
     }()
     
     private lazy var trackerNameBackgroundShape: UIView = {
@@ -103,7 +142,7 @@ final class TrackerDetailsViewController : UIViewController {
         return cancelButton
     }()
     
-    private lazy var createButton: UIButton = {
+    private lazy var storeButton: UIButton = {
         let createButton = UIButton()
         createButton.layer.cornerRadius = 16
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
@@ -207,8 +246,11 @@ final class TrackerDetailsViewController : UIViewController {
     private func configureUI() {
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
         navigationItem.hidesBackButton = true
-        setTitle(trackerDetailsModel?.type)
+        setTitle(trackerDetailsModel)
         configureScroll()
+        if trackerDetailsModel?.flow == TrackerDetailsFlow.edit {
+            configureCounter()
+        }
         configureTrackerNameTextField()
         configureTrackerConfig()
         configureEmoji()
@@ -216,9 +258,13 @@ final class TrackerDetailsViewController : UIViewController {
         configureButtons()
     }
     
-    private func setTitle(_ trackerType: TrackerType?) {
-        guard let trackerType = trackerType else { return }
-        title = trackerType == TrackerType.habit ? "Новая привычка" : "Новое нерегулярное событие"
+    private func setTitle(_ trackerDetailsModel: TrackerDetailsView?) {
+        guard let trackerDetailsModel = trackerDetailsModel else { return }
+        if trackerDetailsModel.flow == TrackerDetailsFlow.edit {
+            title = "Редактирование привычки"
+            return
+        }
+        title = trackerDetailsModel.type == TrackerType.habit ? "Новая привычка" : "Новое нерегулярное событие"
     }
     
     private func configureScroll() {
@@ -232,11 +278,36 @@ final class TrackerDetailsViewController : UIViewController {
         ])
     }
     
+    private func configureCounter() {
+        counterHStack.addArrangedSubview(decreaseButton)
+        counterHStack.addArrangedSubview(counterLabel)
+        counterHStack.addArrangedSubview(increaseButton)
+        scrollContainerView.addSubview(counterHStack)
+        NSLayoutConstraint.activate([
+            decreaseButton.heightAnchor.constraint(equalToConstant: 34),
+            decreaseButton.widthAnchor.constraint(equalToConstant: 34),
+            increaseButton.heightAnchor.constraint(equalToConstant: 34),
+            increaseButton.widthAnchor.constraint(equalToConstant: 34),
+            counterLabel.topAnchor.constraint(equalTo: scrollContainerView.topAnchor, constant: 38),
+            
+            counterHStack.centerXAnchor.constraint(equalTo: scrollContainerView.centerXAnchor),
+        ])
+    }
+    
     private func configureTrackerNameTextField() {
         scrollContainerView.addSubview(trackerNameBackgroundShape)
         trackerNameBackgroundShape.addSubview(trackerNameTextField)
+        let topAnchorConstraintTo: NSLayoutYAxisAnchor
+        let topAnchorConstantInset: CGFloat
+        if trackerDetailsModel?.flow == TrackerDetailsFlow.create {
+            topAnchorConstraintTo = scrollContainerView.topAnchor
+            topAnchorConstantInset = 0
+        } else {
+            topAnchorConstraintTo = counterHStack.bottomAnchor
+            topAnchorConstantInset = 40
+        }
         NSLayoutConstraint.activate([
-            trackerNameBackgroundShape.topAnchor.constraint(equalTo: scrollContainerView.topAnchor),
+            trackerNameBackgroundShape.topAnchor.constraint(equalTo: topAnchorConstraintTo, constant: topAnchorConstantInset),
             trackerNameBackgroundShape.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             trackerNameBackgroundShape.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackerNameBackgroundShape.heightAnchor.constraint(equalToConstant: 75),
@@ -249,11 +320,18 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     private func configureTrackerConfig() {
+        if trackerDetailsModel?.flow == TrackerDetailsFlow.edit {
+            configureEditFlow()
+        }
         if trackerDetailsModel?.type == TrackerType.habit {
             configureHabitTracker()
             return
         }
         configureIrregularEventTracker()
+    }
+    
+    private func configureEditFlow() {
+        storeButton.setTitle("Сохранить", for: UIControl.State.normal)
     }
     
     private func configureHabitTracker() {
@@ -322,10 +400,10 @@ final class TrackerDetailsViewController : UIViewController {
     private func configureButtons() {
         scrollContainerView.addSubview(trackerButtonsHStack)
         trackerButtonsHStack.addArrangedSubview(cancelButton)
-        trackerButtonsHStack.addArrangedSubview(createButton)
+        trackerButtonsHStack.addArrangedSubview(storeButton)
         NSLayoutConstraint.activate([
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.heightAnchor.constraint(equalToConstant: 60),
+            storeButton.heightAnchor.constraint(equalToConstant: 60),
             trackerButtonsHStack.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 30),
             trackerButtonsHStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             trackerButtonsHStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
@@ -342,12 +420,12 @@ final class TrackerDetailsViewController : UIViewController {
         
         let isEnabledCreateButton = isValidTrackerName && isValidTrackerCategory && isValidSchedule && isValidEmoji && isValidColor
         if isEnabledCreateButton {
-            createButton.isEnabled = true
-            createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+            storeButton.isEnabled = true
+            storeButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
             return
         }
-        createButton.isEnabled = false
-        createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
+        storeButton.isEnabled = false
+        storeButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
     }
 }
 

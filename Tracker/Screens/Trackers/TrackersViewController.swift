@@ -17,6 +17,8 @@ protocol TrackersViewProtocol: AnyObject{
     func bindTrackerViewCell(cell: TrackerViewCell, trackerView: TrackerView)
     
     func onTrackerCellButtonClick(trackerCell: TrackerViewCell)
+    
+    func startEditTracker(trackerDetailsView: TrackerDetailsView)
 }
 
 final class TrackersViewController : UIViewController , TrackersViewProtocol {
@@ -185,6 +187,10 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         applyConditionAndShowTrackers()
     }
     
+    func startEditTracker(trackerDetailsView: TrackerDetailsView) {
+        router?.editTracker(trackerDetails: trackerDetailsView, parentVC: self)
+    }
+    
     private func configureUI() {
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
         
@@ -300,7 +306,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             }
             let editAction = UIAction(title: "Редактировать") { [weak self] _ in
                 guard let self else { return }
-                
+                self.presenter?.editTracker(trackerId: currentTracker.id)
             }
             let removeAction = UIAction(title: "Удалить") { [weak self] _ in
                 guard let self else { return }

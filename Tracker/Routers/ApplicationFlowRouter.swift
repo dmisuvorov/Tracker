@@ -100,6 +100,22 @@ final class ApplicationFlowRouter {
         parentNavigationController.pushViewController(createTrackerCategoryViewController, animated: true)
     }
     
+    func editTracker(trackerDetails: TrackerDetailsView, parentVC: UIViewController) {
+        let trackerDetailsViewController = TrackerDetailsViewController()
+        trackerDetailsViewController.trackerDetailsModel = trackerDetails
+        trackerDetailsViewController.router = self
+        let trackerDetailsNavigationViewController = UINavigationController(rootViewController: trackerDetailsViewController)
+        
+        let trackerDetailsNavigationBarAppearence = UINavigationBarAppearance()
+        trackerDetailsNavigationBarAppearence.configureWithOpaqueBackground()
+        trackerDetailsNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        trackerDetailsNavigationBarAppearence.shadowColor = nil
+        trackerDetailsNavigationBarAppearence.shadowImage = nil
+        trackerDetailsNavigationViewController.navigationBar.standardAppearance = trackerDetailsNavigationBarAppearence
+        
+        parentVC.present(trackerDetailsNavigationViewController, animated: true)
+    }
+    
     private func launchedBefore() -> Bool {
         return UserDefaults.standard.bool(forKey: launchedBeforeKey)
     }
