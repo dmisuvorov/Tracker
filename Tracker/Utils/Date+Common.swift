@@ -64,4 +64,9 @@ extension Date {
             return .sun
         }
     }
+    
+    static func random() -> Date {
+        let interval = TimeInterval(arc4random_uniform(UInt32.max))
+        return Date(timeIntervalSince1970: interval)
+    }
 }

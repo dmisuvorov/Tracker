@@ -252,9 +252,9 @@ final class TrackerDetailsViewController : UIViewController {
                 color: selectedColor,
                 categoryName: selectedCategory
             )
-        } else if let initialTracker = trackerDetailsModel?.trackerInfo.trackerDetails {
+        } else if let initialTrackerInfo = trackerDetailsModel?.trackerInfo {
             updateCurrentTracker(
-                initialTracker: initialTracker,
+                initialTrackerInfo: initialTrackerInfo,
                 name: currentTrackerName,
                 color: selectedColor,
                 categoryName: selectedCategory
@@ -275,7 +275,9 @@ final class TrackerDetailsViewController : UIViewController {
         trackersRepository.addNewTracker(tracker: newTracker, categoryName: categoryName)
     }
     
-    private func updateCurrentTracker(initialTracker: Tracker, name: String, color: String, categoryName: String) {
+    private func updateCurrentTracker(initialTrackerInfo: TrackerDetailsInfo, name: String, color: String, categoryName: String) {
+        guard let initialTracker = initialTrackerInfo.trackerDetails,
+              let initialDaysCompleted = initialTrackerInfo.countCompleted else { return }
         let newTracker = Tracker(
             id: initialTracker.id,
             name: name,
@@ -285,6 +287,11 @@ final class TrackerDetailsViewController : UIViewController {
             day: trackerDetailsModel?.trackerInfo.type == TrackerType.irregularEvent ? nil : selectedSchedule
         )
         trackersRepository.updateCurrentTracker(tracker: newTracker, categoryName: categoryName)
+        if currentCountCompleted > initialDaysCompleted {
+            trackersRepository.addRandomTrackerRecords(tracker: initialTracker, count: currentCountCompleted - initialDaysCompleted)
+        } else if currentCountCompleted < initialDaysCompleted {
+            trackersRepository.deleteTrackerRecords(tracker: initialTracker, count: initialDaysCompleted - currentCountCompleted)
+        }
     }
     
     private func configureUI() {

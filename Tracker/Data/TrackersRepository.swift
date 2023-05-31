@@ -124,8 +124,22 @@ final class TrackersRepository {
         return resultCategories
     }
     
+    func addRandomTrackerRecords(tracker: Tracker, count: Int) {
+        for _ in 1...count {
+            addTrackerRecord(trackerRecord: TrackerRecord(id: tracker.id, date: Date.random()))
+        }
+    }
+    
     func addTrackerRecord(trackerRecord: TrackerRecord) {
         trackerRecordStore.addTrackerRecord(trackerRecord: trackerRecord)
+    }
+    
+    func deleteTrackerRecords(tracker: Tracker, count: Int) {
+        for _ in 1...count {
+            if let trackerRecord = completedTrackers.first(where: { $0.id == tracker.id }) {
+                deleteTrackerRecord(trackerRecord: trackerRecord)
+            }
+        }
     }
     
     func deleteTrackerRecord(trackerRecord: TrackerRecord) {
