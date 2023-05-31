@@ -308,6 +308,8 @@
 			dependencies = (
 			);
 			name = Tracker;
+			packageProductDependencies = (
+			);
 			productName = Tracker;
 			productReference = 62ECD8EF29D5C489008956CE /* Tracker.app */;
 			productType = "com.apple.product-type.application";
@@ -336,6 +338,9 @@
 				Base,
 			);
 			mainGroup = 62ECD8E629D5C489008956CE;
+			packageReferences = (
+				620A29F52A27ACA80020DC6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = 62ECD8F029D5C489008956CE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -628,6 +633,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		620A29F52A27ACA80020DC6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
 		624E09BE2A001738001E1BD2 /* TrackerDataModel.xcdatamodeld */ = {
