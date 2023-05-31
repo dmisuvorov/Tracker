@@ -22,6 +22,7 @@ final class TrackerDetailsViewController : UIViewController {
     private var selectedSchedule: Set<Day> = [] { didSet { updateCreateButtonStatus() } }
     private var selectedEmoji: String = "" { didSet { updateCreateButtonStatus() } }
     private var selectedColor: String? = nil { didSet { updateCreateButtonStatus() } }
+    private var currentCountCompleted: Int = 0
     private let trackersRepository: TrackersRepository = TrackersRepository.shared
     private let emojiRepository: EmojiRepository = EmojiRepository.shared
     private let colorRepository: ColorSelectionRepository = ColorSelectionRepository.shared
@@ -56,6 +57,7 @@ final class TrackerDetailsViewController : UIViewController {
         decreaseButton.layer.masksToBounds = true
         decreaseButton.layer.cornerRadius = 17
         decreaseButton.translatesAutoresizingMaskIntoConstraints = false
+        decreaseButton.addTarget(self, action: #selector(onDecreaseButtonClick), for: UIControl.Event.touchUpInside)
         return decreaseButton
     }()
     
@@ -74,6 +76,7 @@ final class TrackerDetailsViewController : UIViewController {
         increaseButton.layer.masksToBounds = true
         increaseButton.layer.cornerRadius = 17
         increaseButton.translatesAutoresizingMaskIntoConstraints = false
+        increaseButton.addTarget(self, action: #selector(onIncreaseButtonClick), for: UIControl.Event.touchUpInside)
         return increaseButton
     }()
     
@@ -223,6 +226,20 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     @objc
+    private func onDecreaseButtonClick() {
+        if currentCountCompleted > 0 {
+            currentCountCompleted -= 1
+            counterLabel.text = "\(currentCountCompleted) \(currentCountCompleted.daysString())"
+        }
+    }
+    
+    @objc
+    private func onIncreaseButtonClick() {
+        currentCountCompleted += 1
+        counterLabel.text = "\(currentCountCompleted) \(currentCountCompleted.daysString())"
+    }
+    
+    @objc
     private func onCreateButtonClick() {
         guard let currentTrackerName = currentTrackerName,
               let selectedColor = selectedColor,
@@ -331,10 +348,13 @@ final class TrackerDetailsViewController : UIViewController {
     
     private func configureEditFlow() {
         storeButton.setTitle("Сохранить", for: UIControl.State.normal)
-        guard let trackerDetails = trackerDetailsModel?.trackerInfo.trackerDetails else { return }
+        guard let trackerInfo = trackerDetailsModel?.trackerInfo,
+              let trackerDetails = trackerInfo.trackerDetails,
+              let countCompleted = trackerInfo.countCompleted else { return }
+        currentCountCompleted = countCompleted
         decreaseButton.backgroundColor = UIColor(named: trackerDetails.color)
         increaseButton.backgroundColor = UIColor(named: trackerDetails.color)
-        counterLabel.text = trackersRepository.getDaysCompletedString(tracker: trackerDetails)
+        counterLabel.text = "\(countCompleted) \(countCompleted.daysString())"
     }
     
     private func configureTrackerDetails(trackerInfo: TrackerDetailsInfo?) {

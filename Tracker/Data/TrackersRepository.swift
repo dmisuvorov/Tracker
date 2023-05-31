@@ -74,7 +74,13 @@ final class TrackersRepository {
             let currentTracker = currentCategory.trackers.first else { return nil }
         
         let currentTrackerType = currentTracker.day == nil ? TrackerType.irregularEvent : TrackerType.habit
-        return TrackerDetailsInfo(categoryName: currentCategory.name, type: currentTrackerType, trackerDetails: currentTracker)
+        let countCompleted = completedTrackers.filter { $0.id == currentTracker.id }.count
+        return TrackerDetailsInfo(
+            categoryName: currentCategory.name,
+            type: currentTrackerType,
+            countCompleted: countCompleted,
+            trackerDetails: currentTracker
+        )
     }
     
     func getTrackersByFilter(filter: (Tracker) -> Bool) -> [TrackerCategory] {
@@ -98,11 +104,6 @@ final class TrackersRepository {
             }
         }
         return resultCategories
-    }
-    
-    func getDaysCompletedString(tracker: Tracker) -> String {
-        let countOfCompleted = completedTrackers.filter { $0.id == tracker.id }.count
-        return "\(countOfCompleted) \(countOfCompleted.daysString())"
     }
     
     func addTrackerRecord(trackerRecord: TrackerRecord) {

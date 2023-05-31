@@ -88,13 +88,14 @@ final class TrackersPresenter {
     func onBindTrackerCell(cell: TrackerViewCell, tracker: Tracker) {
         let isCurrentTrackerDoneInCurrentDate = trackersRepository.completedTrackers
             .filter { $0.id == tracker.id && $0.date == currentSelectedDate }.count > 0
+        let countOfCompleted = trackersRepository.completedTrackers.filter { $0.id == tracker.id }.count
         let trackerViewModel = TrackerView(
             id: tracker.id,
             name: tracker.name,
             color: tracker.color,
             emoji: tracker.emoji,
             isPinned: tracker.isPinned,
-            daysCompleted: trackersRepository.getDaysCompletedString(tracker: tracker),
+            daysCompleted: "\(countOfCompleted) \(countOfCompleted.daysString())",
             isDoneInCurrentDate: isCurrentTrackerDoneInCurrentDate
         )
         trackersView?.bindTrackerViewCell(cell: cell, trackerView: trackerViewModel)

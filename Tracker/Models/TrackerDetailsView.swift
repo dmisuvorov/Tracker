@@ -18,5 +18,6 @@ enum TrackerDetailsFlow {
 struct TrackerDetailsInfo {
     let categoryName: String?
     let type: TrackerType
+    let countCompleted: Int?
     let trackerDetails: Tracker?
 }
