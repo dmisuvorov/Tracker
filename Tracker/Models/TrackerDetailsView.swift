@@ -7,7 +7,7 @@
 
 struct TrackerDetailsView {
     let flow: TrackerDetailsFlow
-    let type: TrackerType
+    let trackerInfo: TrackerDetailsInfo
 }
 
 enum TrackerDetailsFlow {
@@ -15,3 +15,8 @@ enum TrackerDetailsFlow {
     case edit
 }
 
+struct TrackerDetailsInfo {
+    let categoryName: String?
+    let type: TrackerType
+    let trackerDetails: Tracker?
+}

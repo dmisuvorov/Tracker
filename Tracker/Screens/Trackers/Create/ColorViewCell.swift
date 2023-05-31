@@ -10,6 +10,8 @@ import UIKit
 final class ColorViewCell : UICollectionViewCell {
     static let identifier = "ColorViewCell"
     
+    var currentColorString: String? = nil
+    
     private lazy var backgroundShape: UIView = {
         let backgroundShape = UIView()
         backgroundShape.layer.masksToBounds = true
@@ -29,7 +31,7 @@ final class ColorViewCell : UICollectionViewCell {
         return colorView
     }()
     
-    var currentColor: UIColor {
+    private var currentColor: UIColor {
         return colorView.backgroundColor ?? UIColor.clear
     }
     
@@ -42,8 +44,10 @@ final class ColorViewCell : UICollectionViewCell {
         configureUI()
     }
     
-    func bindCell(color: UIColor, isSelected: Bool = false) {
-        colorView.backgroundColor = color
+    func bindCell(color: String, isSelected: Bool = false) {
+        let uiColor = UIColor(named: color) ?? .clear
+        currentColorString = color
+        colorView.backgroundColor = uiColor
         if isSelected {
             selectCell()
             return

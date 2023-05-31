@@ -64,7 +64,8 @@ final class ApplicationFlowRouter {
     
     func createNewTrackSecondStep(trackerType: TrackerType, parentNavigationController: UINavigationController) {
         let trackerDetailsViewController = TrackerDetailsViewController()
-        trackerDetailsViewController.trackerDetailsModel = TrackerDetailsView(flow: TrackerDetailsFlow.create, type: trackerType)
+        let trackerDetailsInfo = TrackerDetailsInfo(categoryName: nil, type: trackerType, trackerDetails: nil)
+        trackerDetailsViewController.trackerDetailsModel = TrackerDetailsView(flow: TrackerDetailsFlow.create, trackerInfo: trackerDetailsInfo)
         trackerDetailsViewController.router = self
         parentNavigationController.pushViewController(trackerDetailsViewController, animated: true)
     }
@@ -81,11 +82,11 @@ final class ApplicationFlowRouter {
     }
     
     func confugureNewTrackerCategory(
-        selectedCategory: TrackerCategory?,
+        selectedCategoryName: String?,
         trackerCategoryDelegate: TrackerCategoryDelegate,
         parentNavigationController: UINavigationController
     ) {
-        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategory)
+        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategoryName)
         let trackerCategoryViewController = TrackerCategoryListViewController(viewModel: trackerCategoryViewModel)
         trackerCategoryViewController.trackerCategoryDelegate = trackerCategoryDelegate
         trackerCategoryViewController.router = self

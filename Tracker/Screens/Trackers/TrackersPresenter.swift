@@ -63,9 +63,8 @@ final class TrackersPresenter {
     }
     
     func editTracker(trackerId: UUID) {
-        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
-        //TODO: - расширить модель TrackerDetailsFlow c передачей всех параметров
-        let trackerDetailsView = TrackerDetailsView(flow: TrackerDetailsFlow.edit, type: TrackerType.habit)
+        guard let trackerDetails = trackersRepository.getTrackerDetailsInfoByIdOrNil(trackerId: trackerId) else { return }
+        let trackerDetailsView = TrackerDetailsView(flow: TrackerDetailsFlow.edit, trackerInfo: trackerDetails)
         trackersView?.startEditTracker(trackerDetailsView: trackerDetailsView)
     }
     
@@ -89,15 +88,13 @@ final class TrackersPresenter {
     func onBindTrackerCell(cell: TrackerViewCell, tracker: Tracker) {
         let isCurrentTrackerDoneInCurrentDate = trackersRepository.completedTrackers
             .filter { $0.id == tracker.id && $0.date == currentSelectedDate }.count > 0
-        let countOfCompleted = trackersRepository.completedTrackers
-            .filter { $0.id == tracker.id }.count
         let trackerViewModel = TrackerView(
             id: tracker.id,
             name: tracker.name,
             color: tracker.color,
             emoji: tracker.emoji,
             isPinned: tracker.isPinned,
-            daysCompleted: "\(countOfCompleted) \(countOfCompleted.daysString())",
+            daysCompleted: trackersRepository.getDaysCompletedString(tracker: tracker),
             isDoneInCurrentDate: isCurrentTrackerDoneInCurrentDate
         )
         trackersView?.bindTrackerViewCell(cell: cell, trackerView: trackerViewModel)

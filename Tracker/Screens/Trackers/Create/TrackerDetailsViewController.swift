@@ -18,10 +18,10 @@ final class TrackerDetailsViewController : UIViewController {
     var router: ApplicationFlowRouter? = nil
     
     private var currentTrackerName: String? { didSet { updateCreateButtonStatus() } }
-    private var selectedCategory: TrackerCategory? = nil { didSet { updateCreateButtonStatus() } }
+    private var selectedCategory: String? = nil { didSet { updateCreateButtonStatus() } }
     private var selectedSchedule: Set<Day> = [] { didSet { updateCreateButtonStatus() } }
     private var selectedEmoji: String = "" { didSet { updateCreateButtonStatus() } }
-    private var selectedColor: UIColor? = nil { didSet { updateCreateButtonStatus() } }
+    private var selectedColor: String? = nil { didSet { updateCreateButtonStatus() } }
     private let trackersRepository: TrackersRepository = TrackersRepository.shared
     private let emojiRepository: EmojiRepository = EmojiRepository.shared
     private let colorRepository: ColorSelectionRepository = ColorSelectionRepository.shared
@@ -53,7 +53,6 @@ final class TrackerDetailsViewController : UIViewController {
         let decreaseButton = UIButton()
         decreaseButton.setImage(UIImage(systemName: "minus"), for: .normal)
         decreaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
-        decreaseButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
         decreaseButton.layer.masksToBounds = true
         decreaseButton.layer.cornerRadius = 17
         decreaseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +71,6 @@ final class TrackerDetailsViewController : UIViewController {
         let increaseButton = UIButton()
         increaseButton.setImage(UIImage(systemName: "plus"), for: .normal)
         increaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
-        increaseButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
         increaseButton.layer.masksToBounds = true
         increaseButton.layer.cornerRadius = 17
         increaseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -104,7 +102,7 @@ final class TrackerDetailsViewController : UIViewController {
             
             self.router?
                 .confugureNewTrackerCategory(
-                    selectedCategory: self.selectedCategory,
+                    selectedCategoryName: self.selectedCategory,
                     trackerCategoryDelegate: self,
                     parentNavigationController: navigationController
                 )
@@ -234,12 +232,12 @@ final class TrackerDetailsViewController : UIViewController {
         let newTracker = Tracker(
             id: UUID(),
             name: currentTrackerName,
-            color: selectedColor.colorToHexString(),
+            color: selectedColor,
             emoji: selectedEmoji,
             isPinned: false,
-            day: trackerDetailsModel?.type == TrackerType.irregularEvent ? nil : selectedSchedule
+            day: trackerDetailsModel?.trackerInfo.type == TrackerType.irregularEvent ? nil : selectedSchedule
         )
-        trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory.name)
+        trackersRepository.addNewTracker(tracker: newTracker, categoryName: selectedCategory)
         dismiss(animated: true)
     }
     
@@ -264,7 +262,7 @@ final class TrackerDetailsViewController : UIViewController {
             title = "Редактирование привычки"
             return
         }
-        title = trackerDetailsModel.type == TrackerType.habit ? "Новая привычка" : "Новое нерегулярное событие"
+        title = trackerDetailsModel.trackerInfo.type == TrackerType.habit ? "Новая привычка" : "Новое нерегулярное событие"
     }
     
     private func configureScroll() {
@@ -320,10 +318,11 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     private func configureTrackerConfig() {
+        configureTrackerDetails(trackerInfo: trackerDetailsModel?.trackerInfo)
         if trackerDetailsModel?.flow == TrackerDetailsFlow.edit {
             configureEditFlow()
         }
-        if trackerDetailsModel?.type == TrackerType.habit {
+        if trackerDetailsModel?.trackerInfo.type == TrackerType.habit {
             configureHabitTracker()
             return
         }
@@ -332,6 +331,32 @@ final class TrackerDetailsViewController : UIViewController {
     
     private func configureEditFlow() {
         storeButton.setTitle("Сохранить", for: UIControl.State.normal)
+        guard let trackerDetails = trackerDetailsModel?.trackerInfo.trackerDetails else { return }
+        decreaseButton.backgroundColor = UIColor(named: trackerDetails.color)
+        increaseButton.backgroundColor = UIColor(named: trackerDetails.color)
+        counterLabel.text = trackersRepository.getDaysCompletedString(tracker: trackerDetails)
+    }
+    
+    private func configureTrackerDetails(trackerInfo: TrackerDetailsInfo?) {
+        guard let trackerInfo = trackerInfo,
+              let currentCategoryName = trackerInfo.categoryName,
+              let trackerDetails = trackerInfo.trackerDetails else { return }
+        trackerNameTextField.text = trackerDetails.name
+        currentTrackerName = trackerDetails.name
+        
+        categoryTrackerCell.updateSubtitle(subtitle: currentCategoryName)
+        selectedCategory = currentCategoryName
+        if let schedule = trackerDetails.day {
+            scheduleTrackerCell.updateSubtitle(subtitle: schedule.toShortDescription())
+            selectedSchedule = schedule
+        }
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            let emojiIndex = IndexPath(row: self.emojiRepository.findEmojiIndex(emoji: trackerDetails.emoji) ?? 0, section: 0)
+            self.collectionView(self.emojiCollectionView, didSelectItemAt: emojiIndex)
+            let colorIndex = IndexPath(row: self.colorRepository.findColorIndex(color: trackerDetails.color) ?? 0, section: 0)
+            self.collectionView(self.colorCollectionView, didSelectItemAt: colorIndex)
+        }
     }
     
     private func configureHabitTracker() {
@@ -367,7 +392,7 @@ final class TrackerDetailsViewController : UIViewController {
         scrollContainerView.addSubview(emojiTitleLabel)
         scrollContainerView.addSubview(emojiCollectionView)
         let topAnchorConstraintTo: NSLayoutYAxisAnchor
-        if trackerDetailsModel?.type == TrackerType.habit {
+        if trackerDetailsModel?.trackerInfo.type == TrackerType.habit {
             topAnchorConstraintTo = scheduleTrackerCell.bottomAnchor
         } else {
             topAnchorConstraintTo = categoryTrackerCell.bottomAnchor
@@ -414,7 +439,7 @@ final class TrackerDetailsViewController : UIViewController {
     private func updateCreateButtonStatus() {
         let isValidTrackerName = currentTrackerName?.isEmpty == false
         let isValidTrackerCategory = selectedCategory != nil
-        let isValidSchedule = trackerDetailsModel?.type == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
+        let isValidSchedule = trackerDetailsModel?.trackerInfo.type == TrackerType.irregularEvent || selectedSchedule.isEmpty == false
         let isValidEmoji = selectedEmoji.isEmpty == false
         let isValidColor = selectedColor != nil
         
@@ -437,9 +462,9 @@ extension TrackerDetailsViewController : ScheduleDelegate {
 }
 
 extension TrackerDetailsViewController : TrackerCategoryDelegate {
-    func onSelectCategory(selectedCategory: TrackerCategory) {
+    func onSelectCategory(selectedCategory: String) {
         self.selectedCategory = selectedCategory
-        categoryTrackerCell.updateSubtitle(subtitle: selectedCategory.name)
+        categoryTrackerCell.updateSubtitle(subtitle: selectedCategory)
     }
 }
 
@@ -515,7 +540,7 @@ extension TrackerDetailsViewController: UICollectionViewDelegate {
         }
         guard let colorCell = collectionView.cellForItem(at: indexPath) as? ColorViewCell else { return }
         colorCell.selectCell()
-        selectedColor = colorCell.currentColor
+        selectedColor = colorCell.currentColorString
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

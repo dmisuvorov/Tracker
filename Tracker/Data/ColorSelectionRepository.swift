@@ -4,38 +4,35 @@
 //
 //  Created by Суворов Дмитрий Владимирович on 30.04.2023.
 //
-import UIKit
 
 final class ColorSelectionRepository {
     static let shared = ColorSelectionRepository()
     
-    let currentColors = [
-        UIColor.colorSelection(csColor: ColorSelection.CS1),
-        UIColor.colorSelection(csColor: ColorSelection.CS2),
-        UIColor.colorSelection(csColor: ColorSelection.CS3),
-        UIColor.colorSelection(csColor: ColorSelection.CS4),
-        UIColor.colorSelection(csColor: ColorSelection.CS5),
-        UIColor.colorSelection(csColor: ColorSelection.CS6),
-        UIColor.colorSelection(csColor: ColorSelection.CS7),
-        UIColor.colorSelection(csColor: ColorSelection.CS8),
-        UIColor.colorSelection(csColor: ColorSelection.CS9),
-        UIColor.colorSelection(csColor: ColorSelection.CS10),
-        UIColor.colorSelection(csColor: ColorSelection.CS11),
-        UIColor.colorSelection(csColor: ColorSelection.CS12),
-        UIColor.colorSelection(csColor: ColorSelection.CS13),
-        UIColor.colorSelection(csColor: ColorSelection.CS14),
-        UIColor.colorSelection(csColor: ColorSelection.CS15),
-        UIColor.colorSelection(csColor: ColorSelection.CS16),
-        UIColor.colorSelection(csColor: ColorSelection.CS17),
-        UIColor.colorSelection(csColor: ColorSelection.CS18)
+    let currentColors: [String] = [
+        ColorSelection.CS1.rawValue,
+        ColorSelection.CS2.rawValue,
+        ColorSelection.CS3.rawValue,
+        ColorSelection.CS4.rawValue,
+        ColorSelection.CS5.rawValue,
+        ColorSelection.CS6.rawValue,
+        ColorSelection.CS7.rawValue,
+        ColorSelection.CS8.rawValue,
+        ColorSelection.CS9.rawValue,
+        ColorSelection.CS10.rawValue,
+        ColorSelection.CS11.rawValue,
+        ColorSelection.CS12.rawValue,
+        ColorSelection.CS13.rawValue,
+        ColorSelection.CS14.rawValue,
+        ColorSelection.CS15.rawValue,
+        ColorSelection.CS16.rawValue,
+        ColorSelection.CS17.rawValue,
+        ColorSelection.CS18.rawValue
     ]
     
     private init() { }
-}
-
-private extension UIColor {
-    static func colorSelection(csColor: ColorSelection) -> UIColor {
-        UIColor(named: csColor.rawValue) ?? .clear
+    
+    func findColorIndex(color: String) -> Int? {
+        return currentColors.firstIndex(of: color)
     }
 }
 

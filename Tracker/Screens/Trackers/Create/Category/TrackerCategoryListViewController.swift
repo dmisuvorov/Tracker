@@ -90,7 +90,7 @@ final class TrackerCategoryListViewController: UIViewController {
         viewModel.$selectedCategory.bind { [weak self] selectedCategory in
             guard let selectedCategory = selectedCategory else { return }
             
-            self?.trackerCategoryDelegate?.onSelectCategory(selectedCategory: selectedCategory)
+            self?.trackerCategoryDelegate?.onSelectCategory(selectedCategory: selectedCategory.name)
             self?.navigationController?.popViewController(animated: true)
         }
         

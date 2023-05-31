@@ -67,6 +67,16 @@ final class TrackersRepository {
         return trackerCategories.first?.trackers.first ?? nil
     }
     
+    func getTrackerDetailsInfoByIdOrNil(trackerId: UUID) -> TrackerDetailsInfo? {
+        let trackerCategories = getTrackersByFilter { tracker in tracker.id == trackerId }
+        guard trackerCategories.isEmpty == false,
+            let currentCategory = trackerCategories.first,
+            let currentTracker = currentCategory.trackers.first else { return nil }
+        
+        let currentTrackerType = currentTracker.day == nil ? TrackerType.irregularEvent : TrackerType.habit
+        return TrackerDetailsInfo(categoryName: currentCategory.name, type: currentTrackerType, trackerDetails: currentTracker)
+    }
+    
     func getTrackersByFilter(filter: (Tracker) -> Bool) -> [TrackerCategory] {
         var resultCategories: [TrackerCategory] = []
         categories.forEach { category in
@@ -78,6 +88,21 @@ final class TrackersRepository {
             }
         }
         return resultCategories
+    }
+    
+    func getTrackerCategoriesByFilter(filter: (TrackerCategory) -> Bool) -> [TrackerCategory] {
+        var resultCategories: [TrackerCategory] = []
+        categories.forEach { category in
+            if filter(category) {
+                resultCategories.append(category)
+            }
+        }
+        return resultCategories
+    }
+    
+    func getDaysCompletedString(tracker: Tracker) -> String {
+        let countOfCompleted = completedTrackers.filter { $0.id == tracker.id }.count
+        return "\(countOfCompleted) \(countOfCompleted.daysString())"
     }
     
     func addTrackerRecord(trackerRecord: TrackerRecord) {

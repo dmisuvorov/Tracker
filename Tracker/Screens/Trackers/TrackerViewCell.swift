@@ -121,7 +121,7 @@ final class TrackerViewCell : UICollectionViewCell {
         titleLabel.text = tracker.name
         dayLabel.text = tracker.daysCompleted
         emojiLabel.text = tracker.emoji
-        let backgroundColor = UIColor.colorFromHex(hexString: tracker.color) ?? UIColor.dsColor(dsColor: DSColor.blue)
+        let backgroundColor = UIColor(named: tracker.color) ?? UIColor.dsColor(dsColor: DSColor.blue)
         backgroundShape.backgroundColor = backgroundColor
         
         if tracker.isDoneInCurrentDate {

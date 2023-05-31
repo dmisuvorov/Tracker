@@ -21,8 +21,8 @@ final class TrackerCategoryViewModel {
     @Observable
     private (set) var isPlaceholderViewHidden = true
     
-    init(selectedCategory: TrackerCategory? = nil) {
-        self.selectedCategory = selectedCategory
+    init(selectedCategory: String? = nil) {
+        self.selectedCategory = trackersRepository.getTrackerCategoriesByFilter { category in category.name == selectedCategory }.first
     }
     
     func onBindCategoryList() {
