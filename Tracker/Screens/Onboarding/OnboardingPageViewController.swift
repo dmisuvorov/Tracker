@@ -18,8 +18,8 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.currentPageIndicatorTintColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
-        pageControl.pageIndicatorTintColor = UIColor.dsColor(dsColor: DSColor.dayBlack).withAlphaComponent(0.3)
+        pageControl.currentPageIndicatorTintColor = UIColor.dsColor(dsColor: DSColor.black)
+        pageControl.pageIndicatorTintColor = UIColor.dsColor(dsColor: DSColor.black).withAlphaComponent(0.3)
         pageControl.numberOfPages = pages.count
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl
@@ -27,9 +27,9 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private lazy var button: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
         button.setTitle("Вот это технологии!", for: UIControl.State.normal)
-        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false

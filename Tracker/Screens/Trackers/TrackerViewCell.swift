@@ -16,7 +16,7 @@ final class TrackerViewCell : UICollectionViewCell {
     
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
-        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.white)
         addButton.layer.masksToBounds = true
         addButton.layer.cornerRadius = 17
         addButton.setImage(UIImage(systemName: "plus"), for: UIControl.State.normal)
@@ -42,7 +42,7 @@ final class TrackerViewCell : UICollectionViewCell {
     
     private lazy var emojiBackgroundShape: UIView = {
         let emojiBackgroundShape = UIView()
-        emojiBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite).withAlphaComponent(0.3)
+        emojiBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.white).withAlphaComponent(0.3)
         emojiBackgroundShape.layer.masksToBounds = true
         emojiBackgroundShape.layer.cornerRadius = 12
         emojiBackgroundShape.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ final class TrackerViewCell : UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 12)
-        titleLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        titleLabel.textColor = UIColor.dsColor(dsColor: DSColor.white)
         titleLabel.numberOfLines = 2
         titleLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ final class TrackerViewCell : UICollectionViewCell {
     private lazy var dayLabel: UILabel = {
         let dayLabel = UILabel()
         dayLabel.font = UIFont.systemFont(ofSize: 12)
-        dayLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        dayLabel.textColor = UIColor.dsColor(dsColor: DSColor.black)
         dayLabel.numberOfLines = 1
         dayLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
         dayLabel.translatesAutoresizingMaskIntoConstraints = false

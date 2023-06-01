@@ -15,7 +15,7 @@ final class ScheduleViewCell : UITableViewCell {
         backgroundShape.layer.masksToBounds = true
         backgroundShape.layer.cornerRadius = 16
         backgroundShape.clipsToBounds = true
-        backgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBackground)
+        backgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.background)
         backgroundShape.translatesAutoresizingMaskIntoConstraints = false
         return backgroundShape
     }()
@@ -23,7 +23,7 @@ final class ScheduleViewCell : UITableViewCell {
     private lazy var dayLabel: UILabel = {
         let dayLabel = UILabel()
         dayLabel.font = UIFont.systemFont(ofSize: 17)
-        dayLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        dayLabel.textColor = UIColor.dsColor(dsColor: DSColor.black)
         dayLabel.translatesAutoresizingMaskIntoConstraints = false
         return dayLabel
     }()

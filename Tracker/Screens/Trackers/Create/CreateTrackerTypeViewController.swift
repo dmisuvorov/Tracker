@@ -11,9 +11,9 @@ final class CreateTrackerTypeViewController: UIViewController {
     
     private lazy var habitTrackerTypeButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
         button.setTitle("Привычка", for: UIControl.State.normal)
-        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -24,9 +24,9 @@ final class CreateTrackerTypeViewController: UIViewController {
     
     private lazy var irregularEventTrackerTypeButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
         button.setTitle("Нерегулярное событие", for: UIControl.State.normal)
-        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ final class CreateTrackerTypeViewController: UIViewController {
     }
     
     private func configureUI() {
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(habitTrackerTypeButton)
         view.addSubview(irregularEventTrackerTypeButton)
 

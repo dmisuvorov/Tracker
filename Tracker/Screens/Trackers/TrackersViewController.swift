@@ -44,7 +44,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         collectionView.dataSource = self
         collectionView.register(TrackerViewCell.self, forCellWithReuseIdentifier: TrackerViewCell.identifier)
         collectionView.register(CategoryTrackerViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTrackerViewCell.identifier)
-        collectionView.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        collectionView.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -56,7 +56,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
             target: self,
             action: #selector(onAddButtonClick)
         )
-        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.black)
         
         return addButton
     }()
@@ -192,7 +192,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     }
     
     private func configureUI() {
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         
         view.addSubview(collectionView)
         view.addSubview(emptyTrackersPlaceholderView)
@@ -227,7 +227,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     private func configureNavigationBar() {
         navigationItem.standardAppearance?.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.dayBlack),
+            NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.black),
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 34)
         ]
         title = "Трекеры"

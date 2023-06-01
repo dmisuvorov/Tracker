@@ -12,9 +12,9 @@ enum DSColor: String {
     case lightGray = "Light Gray"
     case red = "Red"
     
-    case dayBackground = "Background [day]"
-    case dayBlack = "Black [day]"
-    case dayWhite = "White [day]"
+    case background = "Background"
+    case black = "Black"
+    case white = "White"
 }
 
 extension UIColor {

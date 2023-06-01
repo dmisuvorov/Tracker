@@ -15,9 +15,9 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var readyButton: UIButton = {
         let readyButton = UIButton()
-        readyButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        readyButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
         readyButton.setTitle("Готово", for: UIControl.State.normal)
-        readyButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        readyButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         readyButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         readyButton.layer.cornerRadius = 16
         readyButton.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +51,7 @@ final class ScheduleViewController: UIViewController {
     private func configureUI() {
         title = "Расписание"
         navigationItem.hidesBackButton = true
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(scheduleTable)
         view.addSubview(readyButton)
         

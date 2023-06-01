@@ -35,9 +35,9 @@ final class TrackerCategoryListViewController: UIViewController {
     
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
-        addButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        addButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
         addButton.setTitle("Добавить категорию", for: UIControl.State.normal)
-        addButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        addButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         addButton.layer.cornerRadius = 16
         addButton.addTarget(self, action: #selector(onCreateCategoryButtonClick), for: .touchUpInside)
@@ -100,7 +100,7 @@ final class TrackerCategoryListViewController: UIViewController {
     private func configureUI() {
         title = "Категория"
         navigationItem.hidesBackButton = true
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(categoryList)
         view.addSubview(addButton)
         view.addSubview(emptyCategoriesPlaceholderView)

@@ -25,7 +25,7 @@ final class OnboardingViewController: UIViewController {
         textLabel.numberOfLines = 2
         textLabel.textAlignment = NSTextAlignment.center
         textLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.bold)
-        textLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        textLabel.textColor = UIColor.dsColor(dsColor: DSColor.black)
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         return textLabel
     }()

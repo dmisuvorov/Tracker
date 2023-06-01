@@ -54,7 +54,7 @@ final class ApplicationFlowRouter {
         
         let createNewTrackNavigationBarAppearence = UINavigationBarAppearance()
         createNewTrackNavigationBarAppearence.configureWithOpaqueBackground()
-        createNewTrackNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        createNewTrackNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         createNewTrackNavigationBarAppearence.shadowColor = nil
         createNewTrackNavigationBarAppearence.shadowImage = nil
         createNewTrackNavigationViewController.navigationBar.standardAppearance = createNewTrackNavigationBarAppearence
@@ -109,7 +109,7 @@ final class ApplicationFlowRouter {
         
         let trackerDetailsNavigationBarAppearence = UINavigationBarAppearance()
         trackerDetailsNavigationBarAppearence.configureWithOpaqueBackground()
-        trackerDetailsNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        trackerDetailsNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         trackerDetailsNavigationBarAppearence.shadowColor = nil
         trackerDetailsNavigationBarAppearence.shadowImage = nil
         trackerDetailsNavigationViewController.navigationBar.standardAppearance = trackerDetailsNavigationBarAppearence

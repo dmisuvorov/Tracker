@@ -53,7 +53,7 @@ final class TrackerDetailsViewController : UIViewController {
     private lazy var decreaseButton: UIButton = {
         let decreaseButton = UIButton()
         decreaseButton.setImage(UIImage(systemName: "minus"), for: .normal)
-        decreaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        decreaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.white)
         decreaseButton.layer.masksToBounds = true
         decreaseButton.layer.cornerRadius = 17
         decreaseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +72,7 @@ final class TrackerDetailsViewController : UIViewController {
     private lazy var increaseButton: UIButton = {
         let increaseButton = UIButton()
         increaseButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        increaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        increaseButton.tintColor = UIColor.dsColor(dsColor: DSColor.white)
         increaseButton.layer.masksToBounds = true
         increaseButton.layer.cornerRadius = 17
         increaseButton.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +85,7 @@ final class TrackerDetailsViewController : UIViewController {
         trackerNameBackgroundShape.layer.masksToBounds = true
         trackerNameBackgroundShape.layer.cornerRadius = 16
         trackerNameBackgroundShape.clipsToBounds = true
-        trackerNameBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBackground)
+        trackerNameBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.background)
         trackerNameBackgroundShape.translatesAutoresizingMaskIntoConstraints = false
         return trackerNameBackgroundShape
     }()
@@ -147,7 +147,7 @@ final class TrackerDetailsViewController : UIViewController {
         let createButton = UIButton()
         createButton.layer.cornerRadius = 16
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
-        createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         createButton.setTitle("Создать", for: UIControl.State.normal)
         createButton.translatesAutoresizingMaskIntoConstraints = true
@@ -295,7 +295,7 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     private func configureUI() {
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         navigationItem.hidesBackButton = true
         setTitle(trackerDetailsModel)
         configureScroll()
@@ -504,7 +504,7 @@ final class TrackerDetailsViewController : UIViewController {
         let isEnabledCreateButton = isValidTrackerName && isValidTrackerCategory && isValidSchedule && isValidEmoji && isValidColor
         if isEnabledCreateButton {
             storeButton.isEnabled = true
-            storeButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+            storeButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
             return
         }
         storeButton.isEnabled = false
