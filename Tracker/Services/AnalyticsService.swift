@@ -12,6 +12,7 @@ final class AnalyticsService {
     private init() { }
     
     func activate() {
-        
+        guard let configuration = YMMYandexMetricaConfiguration(apiKey: Constants.YandexMetricaApiKey) else { return }
+        YMMYandexMetrica.activate(with: configuration)
     }
 }
