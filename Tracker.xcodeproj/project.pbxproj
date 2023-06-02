@@ -36,6 +36,7 @@
 		62BD1BE12A2902F100859E52 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE02A2902F100859E52 /* AnalyticsService.swift */; };
 		62BD1BE32A29099B00859E52 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE22A29099B00859E52 /* Constants.swift */; };
 		62BD1BE52A29EEB000859E52 /* TrackersAnalyticsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE42A29EEB000859E52 /* TrackersAnalyticsRepository.swift */; };
+		62BD1BE72A2A2F4700859E52 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE62A2A2F4700859E52 /* StatisticsViewModel.swift */; };
 		62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */; };
 		62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */; };
 		62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECD8F229D5C489008956CE /* AppDelegate.swift */; };
@@ -108,6 +109,7 @@
 		62BD1BE02A2902F100859E52 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		62BD1BE22A29099B00859E52 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		62BD1BE42A29EEB000859E52 /* TrackersAnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersAnalyticsRepository.swift; sourceTree = "<group>"; };
+		62BD1BE62A2A2F4700859E52 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		62ECD8EF29D5C489008956CE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -331,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				62ECD91129D78F0D008956CE /* StatisticsViewController.swift */,
+				62BD1BE62A2A2F4700859E52 /* StatisticsViewModel.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				624E09B629FE7906001E1BD2 /* ColorSelectionRepository.swift in Sources */,
 				62991D902A2673AC00C3C3A7 /* TrackerDetailsView.swift in Sources */,
 				624E09B92A001610001E1BD2 /* TrackerStore.swift in Sources */,
+				62BD1BE72A2A2F4700859E52 /* StatisticsViewModel.swift in Sources */,
 				626AA9492A0E4F1000770CB9 /* OnboardingPageViewController.swift in Sources */,
 				62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */,
 				62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */,
