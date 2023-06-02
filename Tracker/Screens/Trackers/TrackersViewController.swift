@@ -109,7 +109,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
         placeHolderLabel.text = "Ничего не найдено"
-        let placeHolderImage = UIImageView(image: UIImage(named: "EmptySearchTrackersIll"))
+        let placeHolderImage = UIImageView(image: UIImage(named: "EmptyDataIll"))
         
         let stack = UIStackView()
         stack.axis = NSLayoutConstraint.Axis.vertical
