@@ -35,6 +35,7 @@
 		62BD1BDE2A287CA200859E52 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 62BD1BDD2A287CA200859E52 /* SnapshotTesting */; };
 		62BD1BE12A2902F100859E52 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE02A2902F100859E52 /* AnalyticsService.swift */; };
 		62BD1BE32A29099B00859E52 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE22A29099B00859E52 /* Constants.swift */; };
+		62BD1BE52A29EEB000859E52 /* TrackersAnalyticsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BD1BE42A29EEB000859E52 /* TrackersAnalyticsRepository.swift */; };
 		62BDAA2C29DE1B2E00F95F4D /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */; };
 		62BDAA2E29DF63F000F95F4D /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */; };
 		62ECD8F329D5C489008956CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ECD8F229D5C489008956CE /* AppDelegate.swift */; };
@@ -106,6 +107,7 @@
 		62BD1BD52A287C7700859E52 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		62BD1BE02A2902F100859E52 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		62BD1BE22A29099B00859E52 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		62BD1BE42A29EEB000859E52 /* TrackersAnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersAnalyticsRepository.swift; sourceTree = "<group>"; };
 		62BDAA2B29DE1B2E00F95F4D /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		62BDAA2D29DF63F000F95F4D /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		62ECD8EF29D5C489008956CE /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -355,6 +357,7 @@
 				62F274FE29EB39A3009B9862 /* TrackersRepository.swift */,
 				624E09B329FE7813001E1BD2 /* EmojiRepository.swift */,
 				624E09B529FE7906001E1BD2 /* ColorSelectionRepository.swift */,
+				62BD1BE42A29EEB000859E52 /* TrackersAnalyticsRepository.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				625A628329E5FA0300942818 /* ScheduleViewCell.swift in Sources */,
 				624E09B429FE7813001E1BD2 /* EmojiRepository.swift in Sources */,
 				626AA94E2A10E0D300770CB9 /* OnboardingViewController.swift in Sources */,
+				62BD1BE52A29EEB000859E52 /* TrackersAnalyticsRepository.swift in Sources */,
 				62ECD90E29D78E78008956CE /* ApplicationFlowRouter.swift in Sources */,
 				62ECD91729DCC12D008956CE /* Tracker.swift in Sources */,
 				62F2750329ED5BF4009B9862 /* TrackersPresenter.swift in Sources */,

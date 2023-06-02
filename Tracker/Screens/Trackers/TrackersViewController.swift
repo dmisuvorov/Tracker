@@ -132,7 +132,12 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         configureObserver()
         
         presenter = TrackersPresenter(trackersView: self)
+        presenter?.onViewDidLoad()
         applyConditionAndShowTrackers()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        presenter?.onViewDidDisappear()
     }
     
     @objc
@@ -147,6 +152,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     }
     
     @objc private func onAddButtonClick() {
+        presenter?.onAddNewTrackerClick()
         router?.createNewTrackFirstStep(parentVC: self)
     }
     

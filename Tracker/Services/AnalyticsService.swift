@@ -15,4 +15,8 @@ final class AnalyticsService {
         guard let configuration = YMMYandexMetricaConfiguration(apiKey: Constants.YandexMetricaApiKey) else { return }
         YMMYandexMetrica.activate(with: configuration)
     }
+    
+    func sendEvent(event: String, params: [AnyHashable: Any]? = nil) {
+        YMMYandexMetrica.reportEvent(event, parameters: params)
+    }
 }

@@ -12,9 +12,22 @@ final class TrackersPresenter {
     private var currentSelectedDate: Date = Date()
     private var currentDate: Date = Date()
     private let trackersRepository = TrackersRepository.shared
+    private let trackersAnalyticsRepository = TrackerAnalyticsRepository.shared
     
     init(trackersView: TrackersViewProtocol) {
         self.trackersView = trackersView
+    }
+    
+    func onViewDidLoad() {
+        trackersAnalyticsRepository.sendShowTrackersScreenEvent()
+    }
+    
+    func onViewDidDisappear() {
+        trackersAnalyticsRepository.sendCloseTrackersScreenEvent()
+    }
+    
+    func onAddNewTrackerClick() {
+        trackersAnalyticsRepository.sendAddNewTrackerEvent()
     }
     
     func showCurrentTrackers() {
@@ -63,12 +76,15 @@ final class TrackersPresenter {
     }
     
     func editTracker(trackerId: UUID) {
+        trackersAnalyticsRepository.sendEditTrackerEvent()
         guard let trackerDetails = trackersRepository.getTrackerDetailsInfoByIdOrNil(trackerId: trackerId) else { return }
         let trackerDetailsView = TrackerDetailsView(flow: TrackerDetailsFlow.edit, trackerInfo: trackerDetails)
         trackersView?.startEditTracker(trackerDetailsView: trackerDetailsView)
     }
     
     func processTrackerClick(trackerId: UUID) {
+        trackersAnalyticsRepository.sendTrackerTapEvent()
+        
         guard currentSelectedDate <= currentDate else { return }
         let completeTracker = TrackerRecord(id: trackerId, date: currentSelectedDate)
         let isNeedMarkUncomplete =
@@ -123,6 +139,7 @@ final class TrackersPresenter {
     }
     
     func removeTracker(trackerId: UUID) {
+        trackersAnalyticsRepository.sendDeleteTrackerEvent()
         guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
         trackersRepository.deleteTracker(tracker: tracker)
     }
