@@ -52,8 +52,8 @@ final class StatisticsItemView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(newCounter: String) {
-        counterLabel.text = newCounter
+    func update(newCounter: Int) {
+        counterLabel.text = String(newCounter)
     }
     
     func configureBorder() {

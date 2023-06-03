@@ -8,6 +8,8 @@
 import UIKit
 
 final class StatisticsViwController : UIViewController {
+    private let viewModel = StatisticsViewModel()
+    
     private lazy var emptyStatisticsPlaceholderView: UIView = {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
@@ -54,7 +56,7 @@ final class StatisticsViwController : UIViewController {
     }()
     
     private lazy var averageValueItemView: StatisticsItemView = {
-        let averageValueItemView = StatisticsItemView(description: "Лучшее значение", counter: "-")
+        let averageValueItemView = StatisticsItemView(description: "Среднее значение", counter: "-")
         averageValueItemView.translatesAutoresizingMaskIntoConstraints = false
         return averageValueItemView
     }()
@@ -62,7 +64,8 @@ final class StatisticsViwController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        showCurrentStatistics()
+        initObservers()
+        viewModel.onViewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,6 +74,33 @@ final class StatisticsViwController : UIViewController {
         bestDaysItemView.configureBorder()
         completedTrackersItemView.configureBorder()
         averageValueItemView.configureBorder()
+    }
+    
+    private func initObservers() {
+        viewModel.$isPlaceholderViewHidden.bind { [weak self] isPlaceholderHidden in
+            guard let self = self else { return }
+            if isPlaceholderHidden {
+                self.showCurrentStatistics()
+                return
+            }
+            self.showEmptyStatisticsPlaceholder()
+        }
+        viewModel.$completedTrackersValue.bind { [weak self] value in
+            guard let self = self else { return }
+            self.completedTrackersItemView.update(newCounter: value)
+        }
+        viewModel.$bestPeriodValue.bind { [weak self] value in
+            guard let self = self else { return }
+            self.bestPeriodItemView.update(newCounter: value)
+        }
+        viewModel.$bestDaysValue.bind { [weak self] value in
+            guard let self = self else { return }
+            self.bestDaysItemView.update(newCounter: value)
+        }
+        viewModel.$averageValue.bind { [weak self] value in
+            guard let self = self else { return }
+            self.averageValueItemView.update(newCounter: value)
+        }
     }
     
     private func configureUI() {

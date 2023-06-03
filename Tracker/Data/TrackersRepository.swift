@@ -12,6 +12,7 @@ final class TrackersRepository {
     
     @Observable
     private (set) var categories: [TrackerCategory] = []
+    @Observable
     private (set) var completedTrackers: Set<TrackerRecord> = []
     
     private let encoder = JSONEncoder()
