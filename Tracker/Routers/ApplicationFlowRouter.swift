@@ -40,6 +40,7 @@ final class ApplicationFlowRouter {
         let statisticsViewController = StatisticsViwController()
         let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
         statisticsNavigationController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(named: "StatisticsTabIcon"), tag: 1)
+        statisticsNavigationController.navigationBar.prefersLargeTitles = true
 
         
         let tabBarController = TabBarController()
