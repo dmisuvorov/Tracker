@@ -111,7 +111,7 @@ final class TrackersPresenter {
             color: tracker.color,
             emoji: tracker.emoji,
             isPinned: tracker.isPinned,
-            daysCompleted: "\(countOfCompleted) \(countOfCompleted.daysString())",
+            daysCompleted: countOfCompleted.daysString(),
             isDoneInCurrentDate: isCurrentTrackerDoneInCurrentDate
         )
         trackersView?.bindTrackerViewCell(cell: cell, trackerView: trackerViewModel)

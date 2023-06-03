@@ -229,14 +229,14 @@ final class TrackerDetailsViewController : UIViewController {
     private func onDecreaseButtonClick() {
         if currentCountCompleted > 0 {
             currentCountCompleted -= 1
-            counterLabel.text = "\(currentCountCompleted) \(currentCountCompleted.daysString())"
+            counterLabel.text = currentCountCompleted.daysString()
         }
     }
     
     @objc
     private func onIncreaseButtonClick() {
         currentCountCompleted += 1
-        counterLabel.text = "\(currentCountCompleted) \(currentCountCompleted.daysString())"
+        counterLabel.text = currentCountCompleted.daysString()
     }
     
     @objc
@@ -390,7 +390,7 @@ final class TrackerDetailsViewController : UIViewController {
         currentCountCompleted = countCompleted
         decreaseButton.backgroundColor = UIColor(named: trackerDetails.color)
         increaseButton.backgroundColor = UIColor(named: trackerDetails.color)
-        counterLabel.text = "\(countCompleted) \(countCompleted.daysString())"
+        counterLabel.text = countCompleted.daysString()
     }
     
     private func configureTrackerDetails(trackerInfo: TrackerDetailsInfo?) {
