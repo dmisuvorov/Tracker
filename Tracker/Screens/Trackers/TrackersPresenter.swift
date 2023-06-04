@@ -117,6 +117,16 @@ final class TrackersPresenter {
         trackersView?.bindTrackerViewCell(cell: cell, trackerView: trackerViewModel)
     }
     
+    func removeTracker(trackerId: UUID) {
+        trackersAnalyticsRepository.sendDeleteTrackerEvent()
+        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
+        trackersRepository.deleteTracker(tracker: tracker)
+    }
+    
+    func filterTracker() {
+        trackersAnalyticsRepository.sendFilterTrackerEvent()
+    }
+    
     private func sortTrackersByPinStatus(currentTrackers: [TrackerCategory]) -> [TrackerCategory] {
         var pinnedTrackers: [Tracker] = []
         var unpinnedCategories: [TrackerCategory] = []
@@ -136,11 +146,5 @@ final class TrackersPresenter {
         let pinnedCategory = TrackerCategory(name: "pinned".localized, trackers: pinnedTrackers)
         let result = [pinnedCategory] + unpinnedCategories
         return result
-    }
-    
-    func removeTracker(trackerId: UUID) {
-        trackersAnalyticsRepository.sendDeleteTrackerEvent()
-        guard let tracker = trackersRepository.getTrackerByIdOrNil(trackerId: trackerId) else { return }
-        trackersRepository.deleteTracker(tracker: tracker)
     }
 }

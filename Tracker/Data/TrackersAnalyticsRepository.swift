@@ -44,4 +44,8 @@ final class TrackerAnalyticsRepository {
     func sendDeleteTrackerEvent() {
         analyticsService.sendEvent(event: clickEvent, params: [screenParamsKey: mainScreenValue, itemParamsKey: "delete"])
     }
+    
+    func sendFilterTrackerEvent() {
+        analyticsService.sendEvent(event: clickEvent, params: [screenParamsKey: mainScreenValue, itemParamsKey: "filter"])
+    }
 }

@@ -85,6 +85,19 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         return searchController
     }()
     
+    private lazy var filterButton: UIButton = {
+        let filterButton = UIButton()
+        filterButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
+        filterButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        filterButton.setTitleColor(UIColor.white, for: .normal)
+        filterButton.setTitle("filters".localized, for: .normal)
+        filterButton.layer.masksToBounds = true
+        filterButton.layer.cornerRadius = 16
+        filterButton.addTarget(nil, action: #selector(onFilterButtonClick), for: .touchUpInside)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        return filterButton
+    }()
+    
     private lazy var emptyTrackersPlaceholderView: UIView = {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
@@ -141,40 +154,52 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     }
     
     @objc
-    func textFieldDidChange(_ textField: UITextField) {
+    private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         searchText = text
         applyConditionAndShowTrackers()
     }
     
-    @objc func hideKeyboard() {
+    @objc
+    private func hideKeyboard() {
         view.endEditing(true)
     }
     
-    @objc private func onAddButtonClick() {
+    @objc
+    private func onAddButtonClick() {
         presenter?.onAddNewTrackerClick()
         router?.createNewTrackFirstStep(parentVC: self)
     }
     
-    @objc private func onDateSelected(_ sender: UIDatePicker) {
+    @objc
+    private func onDateSelected(_ sender: UIDatePicker) {
         presenter?.updateCurrentDate(date: sender.date)
         applyConditionAndShowTrackers()
     }
     
+    @objc
+    private func onFilterButtonClick() {
+        //TODO: - логика по фильтрации
+        presenter?.filterTracker()
+    }
+    
     func showEmptyPlaceholder() {
         collectionView.isHidden = true
+        filterButton.isHidden = true
         emptySearchTrackersPlaceholderView.isHidden = true
         emptyTrackersPlaceholderView.isHidden = false
     }
     
     func showEmptySearchPlaceholder() {
         collectionView.isHidden = true
+        filterButton.isHidden = true
         emptySearchTrackersPlaceholderView.isHidden = false
         emptyTrackersPlaceholderView.isHidden = true
     }
     
     func showCurrentTrackers(categories: [TrackerCategory]) {
         collectionView.isHidden = false
+        filterButton.isHidden = false
         emptySearchTrackersPlaceholderView.isHidden = true
         emptyTrackersPlaceholderView.isHidden = true
         
@@ -201,6 +226,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         
         view.addSubview(collectionView)
+        view.addSubview(filterButton)
         view.addSubview(emptyTrackersPlaceholderView)
         view.addSubview(emptySearchTrackersPlaceholderView)
         
@@ -214,7 +240,12 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
             emptyTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             emptySearchTrackersPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptySearchTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            emptySearchTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 115),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ])
     }
     
