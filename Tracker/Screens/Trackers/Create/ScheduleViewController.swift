@@ -16,7 +16,7 @@ final class ScheduleViewController: UIViewController {
     private lazy var readyButton: UIButton = {
         let readyButton = UIButton()
         readyButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
-        readyButton.setTitle("Готово", for: UIControl.State.normal)
+        readyButton.setTitle("done".localized, for: UIControl.State.normal)
         readyButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         readyButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         readyButton.layer.cornerRadius = 16
@@ -49,7 +49,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func configureUI() {
-        title = "Расписание"
+        title = "schedule".localized
         navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(scheduleTable)
@@ -94,7 +94,7 @@ extension ScheduleViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = scheduleTable.dequeueReusableCell(withIdentifier: ScheduleViewCell.identifier, for: indexPath) as? ScheduleViewCell else { return .init() }
-        let day = days[indexPath.row]
+        let day: Day = days[indexPath.row]
         let cornerMask: CACornerMask
         let isLastRow = indexPath.row == days.count - 1
         
@@ -105,7 +105,7 @@ extension ScheduleViewController: UITableViewDataSource {
         }
         
         cell.bindCell(
-            day: day.rawValue,
+            day: day.localized,
             isOn: selectedDays.contains(day),
             corners: cornerMask,
             isShowDivider: !isLastRow

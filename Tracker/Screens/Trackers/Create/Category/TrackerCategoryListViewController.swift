@@ -36,7 +36,7 @@ final class TrackerCategoryListViewController: UIViewController {
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
         addButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
-        addButton.setTitle("Добавить категорию", for: UIControl.State.normal)
+        addButton.setTitle("add_category".localized, for: UIControl.State.normal)
         addButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         addButton.layer.cornerRadius = 16
@@ -98,7 +98,7 @@ final class TrackerCategoryListViewController: UIViewController {
     }
     
     private func configureUI() {
-        title = "Категория"
+        title = "category".localized
         navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(categoryList)

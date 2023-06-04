@@ -24,7 +24,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
         let trackerCategoryTextField = UITextField()
         trackerCategoryTextField.font = UIFont.systemFont(ofSize: 17)
         trackerCategoryTextField.addTarget(self, action: #selector(onTrackerCategoryChanged), for: UIControl.Event.allEditingEvents)
-        trackerCategoryTextField.placeholder = "Введите название категории"
+        trackerCategoryTextField.placeholder = "enter_category_name".localized
         trackerCategoryTextField.translatesAutoresizingMaskIntoConstraints = false
         return trackerCategoryTextField
     }()
@@ -33,7 +33,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
         let createButton = UIButton()
         createButton.isEnabled = false
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
-        createButton.setTitle("Готово", for: UIControl.State.normal)
+        createButton.setTitle("done".localized, for: UIControl.State.normal)
         createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         createButton.layer.cornerRadius = 16
@@ -83,7 +83,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
     }
     
     private func configureUI() {
-        title = "Новая категория"
+        title = "new_category".localized
         navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(trackerCategoryBackgroundShape)

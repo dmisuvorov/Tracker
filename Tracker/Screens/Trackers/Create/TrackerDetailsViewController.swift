@@ -64,7 +64,6 @@ final class TrackerDetailsViewController : UIViewController {
     private lazy var counterLabel: UILabel = {
         let counterLabel = UILabel()
         counterLabel.font = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.bold)
-        counterLabel.text = "0 дней"
         counterLabel.translatesAutoresizingMaskIntoConstraints = false
         return counterLabel
     }()
@@ -94,13 +93,13 @@ final class TrackerDetailsViewController : UIViewController {
         let trackerNameTextField = UITextField()
         trackerNameTextField.font = UIFont.systemFont(ofSize: 17)
         trackerNameTextField.addTarget(self, action: #selector(onTrackerNameChanged), for: UIControl.Event.allEditingEvents)
-        trackerNameTextField.placeholder = "Введите название трекера"
+        trackerNameTextField.placeholder = "enter_tracker_name".localized
         trackerNameTextField.translatesAutoresizingMaskIntoConstraints = false
         return trackerNameTextField
     }()
     
     private lazy var categoryTrackerCell: TrackerConfigCell = {
-        let categoryTrackerCell = TrackerConfigCell(title: "Категория", onClick: { [weak self] in
+        let categoryTrackerCell = TrackerConfigCell(title: "category".localized, onClick: { [weak self] in
             guard let self = self, let navigationController = self.navigationController else { return }
             
             self.router?
@@ -115,7 +114,7 @@ final class TrackerDetailsViewController : UIViewController {
     }()
     
     private lazy var scheduleTrackerCell: TrackerConfigCell = {
-        let scheduleTrackerCell = TrackerConfigCell(title: "Расписание", onClick: { [weak self] in
+        let scheduleTrackerCell = TrackerConfigCell(title: "schedule".localized, onClick: { [weak self] in
             guard let self = self, let navigationController = self.navigationController else { return }
             
             self.router?
@@ -137,7 +136,7 @@ final class TrackerDetailsViewController : UIViewController {
         cancelButton.backgroundColor = UIColor.clear
         cancelButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.red), for: UIControl.State.normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        cancelButton.setTitle("Отменить", for: UIControl.State.normal)
+        cancelButton.setTitle("cancel".localized, for: UIControl.State.normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = true
         cancelButton.addTarget(self, action: #selector(onCancelButtonClick), for: UIControl.Event.touchUpInside)
         return cancelButton
@@ -149,7 +148,7 @@ final class TrackerDetailsViewController : UIViewController {
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
         createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        createButton.setTitle("Создать", for: UIControl.State.normal)
+        createButton.setTitle("create".localized, for: UIControl.State.normal)
         createButton.translatesAutoresizingMaskIntoConstraints = true
         createButton.isEnabled = false
         createButton.addTarget(self, action: #selector(onStoreButtonClick), for: UIControl.Event.touchUpInside)
@@ -187,7 +186,7 @@ final class TrackerDetailsViewController : UIViewController {
     
     private lazy var colorTitleLabel: UILabel = {
         let colorTitleLabel = UILabel()
-        colorTitleLabel.text = "Цвет"
+        colorTitleLabel.text = "color".localized
         colorTitleLabel.font = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.bold)
         colorTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         return colorTitleLabel
@@ -312,10 +311,10 @@ final class TrackerDetailsViewController : UIViewController {
     private func setTitle(_ trackerDetailsModel: TrackerDetailsView?) {
         guard let trackerDetailsModel = trackerDetailsModel else { return }
         if trackerDetailsModel.flow == TrackerDetailsFlow.edit {
-            title = "Редактирование привычки"
+            title = "edit_habit".localized
             return
         }
-        title = trackerDetailsModel.trackerInfo.type == TrackerType.habit ? "Новая привычка" : "Новое нерегулярное событие"
+        title = trackerDetailsModel.trackerInfo.type == TrackerType.habit ? "new_habit".localized : "new_irregular_event".localized
     }
     
     private func configureScroll() {
@@ -383,7 +382,7 @@ final class TrackerDetailsViewController : UIViewController {
     }
     
     private func configureEditFlow() {
-        storeButton.setTitle("Сохранить", for: UIControl.State.normal)
+        storeButton.setTitle("save".localized, for: UIControl.State.normal)
         guard let trackerInfo = trackerDetailsModel?.trackerInfo,
               let trackerDetails = trackerInfo.trackerDetails,
               let countCompleted = trackerInfo.countCompleted else { return }

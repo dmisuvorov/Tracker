@@ -12,7 +12,7 @@ final class CreateTrackerTypeViewController: UIViewController {
     private lazy var habitTrackerTypeButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
-        button.setTitle("Привычка", for: UIControl.State.normal)
+        button.setTitle("habit".localized, for: UIControl.State.normal)
         button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -25,7 +25,7 @@ final class CreateTrackerTypeViewController: UIViewController {
     private lazy var irregularEventTrackerTypeButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
-        button.setTitle("Нерегулярное событие", for: UIControl.State.normal)
+        button.setTitle("irregular_event".localized, for: UIControl.State.normal)
         button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -36,7 +36,7 @@ final class CreateTrackerTypeViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
-        title = "Создание трекера"
+        title = "create_tracker".localized
         configureUI()
     }
     

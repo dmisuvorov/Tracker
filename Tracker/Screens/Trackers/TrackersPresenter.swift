@@ -133,7 +133,7 @@ final class TrackersPresenter {
         if pinnedTrackers.isEmpty {
             return unpinnedCategories
         }
-        let pinnedCategory = TrackerCategory(name: "Закрепленные", trackers: pinnedTrackers)
+        let pinnedCategory = TrackerCategory(name: "pinned".localized, trackers: pinnedTrackers)
         let result = [pinnedCategory] + unpinnedCategories
         return result
     }

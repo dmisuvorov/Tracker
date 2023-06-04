@@ -14,7 +14,7 @@ final class StatisticsViwController : UIViewController {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
-        placeHolderLabel.text = "Анализировать пока нечего"
+        placeHolderLabel.text = "nothing_to_analyze".localized
         let placeHolderImage = UIImageView(image: UIImage(named: "CrySmileIll"))
         
         let stack = UIStackView()
@@ -38,25 +38,25 @@ final class StatisticsViwController : UIViewController {
     }()
     
     private lazy var bestPeriodItemView: StatisticsItemView = {
-        let bestPeriodItemView = StatisticsItemView(description: "Лучший период", counter: "-")
+        let bestPeriodItemView = StatisticsItemView(description: "best_period".localized, counter: "-")
         bestPeriodItemView.translatesAutoresizingMaskIntoConstraints = false
         return bestPeriodItemView
     }()
     
     private lazy var bestDaysItemView: StatisticsItemView = {
-        let bestDaysItemView = StatisticsItemView(description: "Идеальные дни", counter: "-")
+        let bestDaysItemView = StatisticsItemView(description: "ideal_days".localized, counter: "-")
         bestDaysItemView.translatesAutoresizingMaskIntoConstraints = false
         return bestDaysItemView
     }()
     
     private lazy var completedTrackersItemView: StatisticsItemView = {
-        let completedTrackersItemView = StatisticsItemView(description: "Трекеров завершено", counter: "-")
+        let completedTrackersItemView = StatisticsItemView(description: "completed_trackers".localized, counter: "-")
         completedTrackersItemView.translatesAutoresizingMaskIntoConstraints = false
         return completedTrackersItemView
     }()
     
     private lazy var averageValueItemView: StatisticsItemView = {
-        let averageValueItemView = StatisticsItemView(description: "Лучшее значение", counter: "-")
+        let averageValueItemView = StatisticsItemView(description: "average_value".localized, counter: "-")
         averageValueItemView.translatesAutoresizingMaskIntoConstraints = false
         return averageValueItemView
     }()
@@ -115,7 +115,7 @@ final class StatisticsViwController : UIViewController {
             NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.black),
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 34)
         ]
-        title = "Статистика"
+        title = "statistics".localized
     }
     
     private func configurePlaceholder() {

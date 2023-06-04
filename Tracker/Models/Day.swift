@@ -5,20 +5,32 @@
 //  Created by Суворов Дмитрий Владимирович on 04.04.2023.
 //
 
-enum Day: String, CaseIterable, Codable {
-    case mon = "Понедельник"
-    case tue = "Вторник"
-    case wed = "Среда"
-    case thu = "Четверг"
-    case fri = "Пятница"
-    case sat = "Суббота"
-    case sun = "Воскресенье"
+enum Day: CaseIterable, Codable {
+    case mon
+    case tue
+    case wed
+    case thu
+    case fri
+    case sat
+    case sun
+
+    var localized: String {
+        switch self {
+        case .mon: return "monday".localized
+        case .tue: return "tuesday".localized
+        case .wed: return "wednesday".localized
+        case .thu: return "thursday".localized
+        case .fri: return "friday".localized
+        case .sat: return "saturday".localized
+        case .sun: return "sunday".localized
+        }
+    }
 }
 
 extension Set where Element == Day {
     
     func toShortDescription() -> String {
-        if self == Set(Day.allCases) { return "Каждый день" }
+        if self == Set(Day.allCases) { return "everyday".localized }
         
         return self.sorted { $0.num < $1.num }
             .map { $0.shortDescription }
@@ -31,19 +43,19 @@ private extension Day {
         let description: String
         switch self {
         case .mon:
-            description = "Пн"
+            description = "mon".localized
         case .tue:
-            description = "Вт"
+            description = "tue".localized
         case .wed:
-            description = "Ср"
+            description = "wed".localized
         case .thu:
-            description = "Чт"
+            description = "thu".localized
         case .fri:
-            description = "Пт"
+            description = "fri".localized
         case .sat:
-            description = "Сб"
+            description = "sat".localized
         case .sun:
-            description = "Вс"
+            description = "sun".localized
         }
         
         return description

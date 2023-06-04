@@ -89,7 +89,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
-        placeHolderLabel.text = "Что будем отслеживать?"
+        placeHolderLabel.text = "what_to_track".localized
         let placeHolderImage = UIImageView(image: UIImage(named: "EmptyTrackersIll"))
         
         let stack = UIStackView()
@@ -108,7 +108,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
-        placeHolderLabel.text = "Ничего не найдено"
+        placeHolderLabel.text = "nothing_found".localized
         let placeHolderImage = UIImageView(image: UIImage(named: "EmptyDataIll"))
         
         let stack = UIStackView()
@@ -236,7 +236,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
             NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.black),
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 34)
         ]
-        title = "Трекеры"
+        title = "trackers".localized
         
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = datePickerToolbarItem
@@ -300,21 +300,21 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             let currentTracker = self.visibleCategories[indexPath.section].trackers[indexPath.row]
             let pinOrUnpinAction: UIAction
             if currentTracker.isPinned {
-                pinOrUnpinAction = UIAction(title: "Открепить") { [weak self] _ in
+                pinOrUnpinAction = UIAction(title: "unpin".localized) { [weak self] _ in
                     guard let self else { return }
                     self.presenter?.unpinTracker(trackerId: currentTracker.id)
                 }
             } else {
-                pinOrUnpinAction = UIAction(title: "Закрепить") { [weak self] _ in
+                pinOrUnpinAction = UIAction(title: "pin".localized) { [weak self] _ in
                     guard let self else { return }
                     self.presenter?.pinTracker(trackerId: currentTracker.id)
                 }
             }
-            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+            let editAction = UIAction(title: "edit".localized) { [weak self] _ in
                 guard let self else { return }
                 self.presenter?.editTracker(trackerId: currentTracker.id)
             }
-            let removeAction = UIAction(title: "Удалить", attributes: UIMenuElement.Attributes.destructive) { [weak self] _ in
+            let removeAction = UIAction(title: "delete".localized, attributes: UIMenuElement.Attributes.destructive) { [weak self] _ in
                 guard let self else { return }
                 self.showRemoveTrackerAlert(removedTracker: currentTracker)
             }
@@ -324,12 +324,12 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     private func showRemoveTrackerAlert(removedTracker: Tracker) {
-        let alertController = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
-        let removeAction = UIAlertAction(title: "Удалить", style: UIAlertAction.Style.destructive) { [weak self] _ in
+        let alertController = UIAlertController(title: "confirm_delete_tracker".localized, message: nil, preferredStyle: .actionSheet)
+        let removeAction = UIAlertAction(title: "delete".localized, style: UIAlertAction.Style.destructive) { [weak self] _ in
             guard let self = self else { return }
             self.presenter?.removeTracker(trackerId: removedTracker.id)
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: UIAlertAction.Style.cancel)
+        let cancelAction = UIAlertAction(title: "cancel".localized, style: UIAlertAction.Style.cancel)
         alertController.addAction(removeAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true)

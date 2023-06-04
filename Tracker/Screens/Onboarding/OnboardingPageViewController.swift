@@ -11,8 +11,8 @@ final class OnboardingPageViewController: UIPageViewController {
     var router: ApplicationFlowRouter? = nil
     
     private var pages: [OnboardingModel] = [
-        OnboardingModel(text: "Отслеживайте только\nто, что хотите", image: "Onboarding1"),
-        OnboardingModel(text: "Даже если это\nне литры воды и йога", image: "Onboarding2"),
+        OnboardingModel(text: "track_only_wanted".localized, image: "Onboarding1"),
+        OnboardingModel(text: "not_water_yoga".localized, image: "Onboarding2"),
     ]
 
     
@@ -28,7 +28,7 @@ final class OnboardingPageViewController: UIPageViewController {
     private lazy var button: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
-        button.setTitle("Вот это технологии!", for: UIControl.State.normal)
+        button.setTitle("wow_technologies".localized, for: UIControl.State.normal)
         button.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
