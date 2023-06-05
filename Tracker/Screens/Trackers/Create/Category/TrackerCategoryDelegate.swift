@@ -7,6 +7,6 @@
 
 protocol TrackerCategoryDelegate : AnyObject {
     
-    func onSelectCategory(selectedCategory: TrackerCategory)
+    func onSelectCategory(selectedCategory: String)
     
 }

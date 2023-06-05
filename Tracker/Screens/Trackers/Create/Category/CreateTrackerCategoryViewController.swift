@@ -15,7 +15,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
         trackerCategoryBackgroundShape.layer.masksToBounds = true
         trackerCategoryBackgroundShape.layer.cornerRadius = 16
         trackerCategoryBackgroundShape.clipsToBounds = true
-        trackerCategoryBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBackground)
+        trackerCategoryBackgroundShape.backgroundColor = UIColor.dsColor(dsColor: DSColor.background)
         trackerCategoryBackgroundShape.translatesAutoresizingMaskIntoConstraints = false
         return trackerCategoryBackgroundShape
     }()
@@ -24,7 +24,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
         let trackerCategoryTextField = UITextField()
         trackerCategoryTextField.font = UIFont.systemFont(ofSize: 17)
         trackerCategoryTextField.addTarget(self, action: #selector(onTrackerCategoryChanged), for: UIControl.Event.allEditingEvents)
-        trackerCategoryTextField.placeholder = "Введите название категории"
+        trackerCategoryTextField.placeholder = "enter_category_name".localized
         trackerCategoryTextField.translatesAutoresizingMaskIntoConstraints = false
         return trackerCategoryTextField
     }()
@@ -33,8 +33,8 @@ final class CreateTrackerCategoryViewController: UIViewController {
         let createButton = UIButton()
         createButton.isEnabled = false
         createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.gray)
-        createButton.setTitle("Готово", for: UIControl.State.normal)
-        createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        createButton.setTitle("done".localized, for: UIControl.State.normal)
+        createButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(onCreateButtonClick), for: .touchUpInside)
@@ -74,7 +74,7 @@ final class CreateTrackerCategoryViewController: UIViewController {
             let isEnabledCreateButton = !trackerCategoryName.isEmpty
             if isEnabledCreateButton {
                 self.createButton.isEnabled = true
-                self.createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+                self.createButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
                 return
             }
             self.createButton.isEnabled = false
@@ -83,9 +83,9 @@ final class CreateTrackerCategoryViewController: UIViewController {
     }
     
     private func configureUI() {
-        title = "Новая категория"
+        title = "new_category".localized
         navigationItem.hidesBackButton = true
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(trackerCategoryBackgroundShape)
         view.addSubview(createButton)
         trackerCategoryBackgroundShape.addSubview(trackerCategoryTextField)

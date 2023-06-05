@@ -12,20 +12,20 @@ enum DSColor: String {
     case lightGray = "Light Gray"
     case red = "Red"
     
-    case dayBackground = "Background [day]"
-    case dayBlack = "Black [day]"
-    case dayWhite = "White [day]"
+    case background = "Background"
+    case black = "Black"
+    case white = "White"
 }
 
 extension UIColor {
     static func dsColor(dsColor: DSColor) -> UIColor {
         UIColor(named: dsColor.rawValue) ?? .clear
     }
-
-    static func colorFromHex(hexString: String) -> UIColor? {
+    
+    static func colorFromHex(hexString: String) -> UIColor {
         let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         
-        guard hex.count == 6 else { return nil }
+        guard hex.count == 6 else { return UIColor.clear }
         
         var rgbValue: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&rgbValue)
@@ -35,21 +35,6 @@ extension UIColor {
         let blue = CGFloat(rgbValue & 0x0000FF) / 255.0
 
         return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
-    }
-    
-    func colorToHexString() -> String {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
-        let redInt = Int(red * 255)
-        let greenInt = Int(green * 255)
-        let blueInt = Int(blue * 255)
-        
-        return String(format: "#%02X%02X%02X", redInt, greenInt, blueInt)
     }
 
 }

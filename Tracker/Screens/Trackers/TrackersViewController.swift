@@ -12,11 +12,13 @@ protocol TrackersViewProtocol: AnyObject{
     
     func showEmptySearchPlaceholder()
     
-    func showCurrentTrackers(categories: [TrackerCategory], completedTrackers: Set<TrackerRecord>)
+    func showCurrentTrackers(categories: [TrackerCategory])
     
     func bindTrackerViewCell(cell: TrackerViewCell, trackerView: TrackerView)
     
     func onTrackerCellButtonClick(trackerCell: TrackerViewCell)
+    
+    func startEditTracker(trackerDetailsView: TrackerDetailsView)
 }
 
 final class TrackersViewController : UIViewController , TrackersViewProtocol {
@@ -24,7 +26,6 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     var router: ApplicationFlowRouter? = nil
     private var categories: [TrackerCategory] = []
     private var visibleCategories: [TrackerCategory] = []
-    private var completedTrackers: Set<TrackerRecord> = []
     private var searchText: String = ""
     private var presenter: TrackersPresenter? = nil
     private var addTrackerObserver: NSObjectProtocol?
@@ -43,7 +44,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         collectionView.dataSource = self
         collectionView.register(TrackerViewCell.self, forCellWithReuseIdentifier: TrackerViewCell.identifier)
         collectionView.register(CategoryTrackerViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTrackerViewCell.identifier)
-        collectionView.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        collectionView.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -55,7 +56,7 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
             target: self,
             action: #selector(onAddButtonClick)
         )
-        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        addButton.tintColor = UIColor.dsColor(dsColor: DSColor.black)
         
         return addButton
     }()
@@ -84,11 +85,24 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         return searchController
     }()
     
+    private lazy var filterButton: UIButton = {
+        let filterButton = UIButton()
+        filterButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.blue)
+        filterButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        filterButton.setTitleColor(UIColor.white, for: .normal)
+        filterButton.setTitle("filters".localized, for: .normal)
+        filterButton.layer.masksToBounds = true
+        filterButton.layer.cornerRadius = 16
+        filterButton.addTarget(nil, action: #selector(onFilterButtonClick), for: .touchUpInside)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        return filterButton
+    }()
+    
     private lazy var emptyTrackersPlaceholderView: UIView = {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
-        placeHolderLabel.text = "Что будем отслеживать?"
+        placeHolderLabel.text = "what_to_track".localized
         let placeHolderImage = UIImageView(image: UIImage(named: "EmptyTrackersIll"))
         
         let stack = UIStackView()
@@ -107,8 +121,8 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         let placeHolderLabel = UILabel()
         placeHolderLabel.font = UIFont.systemFont(ofSize: 12)
         placeHolderLabel.textAlignment = NSTextAlignment.center
-        placeHolderLabel.text = "Ничего не найдено"
-        let placeHolderImage = UIImageView(image: UIImage(named: "EmptySearchTrackersIll"))
+        placeHolderLabel.text = "nothing_found".localized
+        let placeHolderImage = UIImageView(image: UIImage(named: "EmptyDataIll"))
         
         let stack = UIStackView()
         stack.axis = NSLayoutConstraint.Axis.vertical
@@ -131,48 +145,65 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         configureObserver()
         
         presenter = TrackersPresenter(trackersView: self)
+        presenter?.onViewDidLoad()
         applyConditionAndShowTrackers()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        presenter?.onViewDidDisappear()
+    }
+    
     @objc
-    func textFieldDidChange(_ textField: UITextField) {
+    private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         searchText = text
         applyConditionAndShowTrackers()
     }
     
-    @objc func hideKeyboard() {
+    @objc
+    private func hideKeyboard() {
         view.endEditing(true)
     }
     
-    @objc private func onAddButtonClick() {
+    @objc
+    private func onAddButtonClick() {
+        presenter?.onAddNewTrackerClick()
         router?.createNewTrackFirstStep(parentVC: self)
     }
     
-    @objc private func onDateSelected(_ sender: UIDatePicker) {
+    @objc
+    private func onDateSelected(_ sender: UIDatePicker) {
         presenter?.updateCurrentDate(date: sender.date)
         applyConditionAndShowTrackers()
     }
     
+    @objc
+    private func onFilterButtonClick() {
+        //TODO: - логика по фильтрации
+        presenter?.filterTracker()
+    }
+    
     func showEmptyPlaceholder() {
         collectionView.isHidden = true
+        filterButton.isHidden = true
         emptySearchTrackersPlaceholderView.isHidden = true
         emptyTrackersPlaceholderView.isHidden = false
     }
     
     func showEmptySearchPlaceholder() {
         collectionView.isHidden = true
+        filterButton.isHidden = true
         emptySearchTrackersPlaceholderView.isHidden = false
         emptyTrackersPlaceholderView.isHidden = true
     }
     
-    func showCurrentTrackers(categories: [TrackerCategory], completedTrackers: Set<TrackerRecord>) {
+    func showCurrentTrackers(categories: [TrackerCategory]) {
         collectionView.isHidden = false
+        filterButton.isHidden = false
         emptySearchTrackersPlaceholderView.isHidden = true
         emptyTrackersPlaceholderView.isHidden = true
         
         self.visibleCategories = categories
-        self.completedTrackers = completedTrackers
         collectionView.reloadData()
     }
     
@@ -187,10 +218,15 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
         applyConditionAndShowTrackers()
     }
     
+    func startEditTracker(trackerDetailsView: TrackerDetailsView) {
+        router?.editTracker(trackerDetails: trackerDetailsView, parentVC: self)
+    }
+    
     private func configureUI() {
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         
         view.addSubview(collectionView)
+        view.addSubview(filterButton)
         view.addSubview(emptyTrackersPlaceholderView)
         view.addSubview(emptySearchTrackersPlaceholderView)
         
@@ -204,7 +240,12 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
             emptyTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             emptySearchTrackersPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptySearchTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            emptySearchTrackersPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 115),
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ])
     }
     
@@ -223,10 +264,10 @@ final class TrackersViewController : UIViewController , TrackersViewProtocol {
     
     private func configureNavigationBar() {
         navigationItem.standardAppearance?.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.dayBlack),
+            NSAttributedString.Key.foregroundColor: UIColor.dsColor(dsColor: DSColor.black),
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 34)
         ]
-        title = "Трекеры"
+        title = "trackers".localized
         
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = datePickerToolbarItem
@@ -278,6 +319,51 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return nil }
+            
+            let currentTracker = self.visibleCategories[indexPath.section].trackers[indexPath.row]
+            let pinOrUnpinAction: UIAction
+            if currentTracker.isPinned {
+                pinOrUnpinAction = UIAction(title: "unpin".localized) { [weak self] _ in
+                    guard let self else { return }
+                    self.presenter?.unpinTracker(trackerId: currentTracker.id)
+                }
+            } else {
+                pinOrUnpinAction = UIAction(title: "pin".localized) { [weak self] _ in
+                    guard let self else { return }
+                    self.presenter?.pinTracker(trackerId: currentTracker.id)
+                }
+            }
+            let editAction = UIAction(title: "edit".localized) { [weak self] _ in
+                guard let self else { return }
+                self.presenter?.editTracker(trackerId: currentTracker.id)
+            }
+            let removeAction = UIAction(title: "delete".localized, attributes: UIMenuElement.Attributes.destructive) { [weak self] _ in
+                guard let self else { return }
+                self.showRemoveTrackerAlert(removedTracker: currentTracker)
+            }
+
+            return UIMenu(children: [pinOrUnpinAction, editAction, removeAction])
+        }
+    }
+    
+    private func showRemoveTrackerAlert(removedTracker: Tracker) {
+        let alertController = UIAlertController(title: "confirm_delete_tracker".localized, message: nil, preferredStyle: .actionSheet)
+        let removeAction = UIAlertAction(title: "delete".localized, style: UIAlertAction.Style.destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.presenter?.removeTracker(trackerId: removedTracker.id)
+        }
+        let cancelAction = UIAlertAction(title: "cancel".localized, style: UIAlertAction.Style.cancel)
+        alertController.addAction(removeAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true)
     }
 }
 

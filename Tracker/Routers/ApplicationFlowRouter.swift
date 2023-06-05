@@ -40,6 +40,7 @@ final class ApplicationFlowRouter {
         let statisticsViewController = StatisticsViwController()
         let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
         statisticsNavigationController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(named: "StatisticsTabIcon"), tag: 1)
+        statisticsNavigationController.navigationBar.prefersLargeTitles = true
 
         
         let tabBarController = TabBarController()
@@ -54,7 +55,7 @@ final class ApplicationFlowRouter {
         
         let createNewTrackNavigationBarAppearence = UINavigationBarAppearance()
         createNewTrackNavigationBarAppearence.configureWithOpaqueBackground()
-        createNewTrackNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        createNewTrackNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         createNewTrackNavigationBarAppearence.shadowColor = nil
         createNewTrackNavigationBarAppearence.shadowImage = nil
         createNewTrackNavigationViewController.navigationBar.standardAppearance = createNewTrackNavigationBarAppearence
@@ -63,10 +64,11 @@ final class ApplicationFlowRouter {
     }
     
     func createNewTrackSecondStep(trackerType: TrackerType, parentNavigationController: UINavigationController) {
-        let createTrackerViewController = CreateTrackerViewController()
-        createTrackerViewController.trackerType = trackerType
-        createTrackerViewController.router = self
-        parentNavigationController.pushViewController(createTrackerViewController, animated: true)
+        let trackerDetailsViewController = TrackerDetailsViewController()
+        let trackerDetailsInfo = TrackerDetailsInfo(categoryName: nil, type: trackerType, countCompleted: nil, trackerDetails: nil)
+        trackerDetailsViewController.trackerDetailsModel = TrackerDetailsView(flow: TrackerDetailsFlow.create, trackerInfo: trackerDetailsInfo)
+        trackerDetailsViewController.router = self
+        parentNavigationController.pushViewController(trackerDetailsViewController, animated: true)
     }
     
     func confugureNewTrackerSchedule(
@@ -81,11 +83,11 @@ final class ApplicationFlowRouter {
     }
     
     func confugureNewTrackerCategory(
-        selectedCategory: TrackerCategory?,
+        selectedCategoryName: String?,
         trackerCategoryDelegate: TrackerCategoryDelegate,
         parentNavigationController: UINavigationController
     ) {
-        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategory)
+        let trackerCategoryViewModel = TrackerCategoryViewModel(selectedCategory: selectedCategoryName)
         let trackerCategoryViewController = TrackerCategoryListViewController(viewModel: trackerCategoryViewModel)
         trackerCategoryViewController.trackerCategoryDelegate = trackerCategoryDelegate
         trackerCategoryViewController.router = self
@@ -98,6 +100,22 @@ final class ApplicationFlowRouter {
     ) {
         let createTrackerCategoryViewController = CreateTrackerCategoryViewController(viewModel: trackerCategoryViewModel)
         parentNavigationController.pushViewController(createTrackerCategoryViewController, animated: true)
+    }
+    
+    func editTracker(trackerDetails: TrackerDetailsView, parentVC: UIViewController) {
+        let trackerDetailsViewController = TrackerDetailsViewController()
+        trackerDetailsViewController.trackerDetailsModel = trackerDetails
+        trackerDetailsViewController.router = self
+        let trackerDetailsNavigationViewController = UINavigationController(rootViewController: trackerDetailsViewController)
+        
+        let trackerDetailsNavigationBarAppearence = UINavigationBarAppearance()
+        trackerDetailsNavigationBarAppearence.configureWithOpaqueBackground()
+        trackerDetailsNavigationBarAppearence.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
+        trackerDetailsNavigationBarAppearence.shadowColor = nil
+        trackerDetailsNavigationBarAppearence.shadowImage = nil
+        trackerDetailsNavigationViewController.navigationBar.standardAppearance = trackerDetailsNavigationBarAppearence
+        
+        parentVC.present(trackerDetailsNavigationViewController, animated: true)
     }
     
     private func launchedBefore() -> Bool {

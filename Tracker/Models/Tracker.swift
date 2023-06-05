@@ -11,5 +11,6 @@ struct Tracker: Equatable {
     let name: String
     let color: String
     let emoji: String
+    let isPinned: Bool
     let day: Set<Day>?
 }

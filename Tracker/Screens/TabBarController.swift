@@ -10,7 +10,7 @@ import UIKit
 final class TabBarController : UITabBarController {
     
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         tabBar.tintColor = UIColor.dsColor(dsColor: DSColor.blue)
     }
     

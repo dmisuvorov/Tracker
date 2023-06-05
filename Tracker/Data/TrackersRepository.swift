@@ -12,7 +12,10 @@ final class TrackersRepository {
     
     @Observable
     private (set) var categories: [TrackerCategory] = []
+    @Observable
     private (set) var completedTrackers: Set<TrackerRecord> = []
+    
+    private let encoder = JSONEncoder()
     
     private lazy var trackerStore: TrackerStore = {
         let trackerStore = TrackerStore(storeDelegate: self)
@@ -46,6 +49,63 @@ final class TrackersRepository {
         trackerStore.addTracker(tracker: tracker, category: trackerCategoryStore.getByName(name: categoryName))
     }
     
+    func updateCurrentTracker(tracker: Tracker, categoryName: String) {
+        let category: TrackerCategory? = trackerCategoryStore.getByName(name: categoryName)
+        if category == nil {
+            addCategory(categoryName: categoryName)
+        }
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.name = tracker.name
+            trackerCD.category = trackerCategoryStore.getByName(name: categoryName)
+            trackerCD.emoji = tracker.emoji
+            trackerCD.color = tracker.color
+            if let schedule = tracker.day {
+                trackerCD.schedule = try? encoder.encode(schedule)
+            }
+        }
+    }
+    
+    func pinTracker(tracker: Tracker) {
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.isPinned = true
+        }
+    }
+    
+    func unpinTracker(tracker: Tracker) {
+        trackerStore.updateTracker(trackerId: tracker.id) { trackerCD in
+            trackerCD.isPinned = false
+        }
+    }
+    
+    func deleteTracker(tracker: Tracker) {
+        trackerStore.deleteTracker(tracker: tracker)
+    }
+    
+    func getTrackerByIdOrNil(trackerId: UUID) -> Tracker? {
+        let trackerCategories = getTrackersByFilter { tracker in tracker.id == trackerId }
+        if trackerCategories.isEmpty {
+            return nil
+        }
+        
+        return trackerCategories.first?.trackers.first ?? nil
+    }
+    
+    func getTrackerDetailsInfoByIdOrNil(trackerId: UUID) -> TrackerDetailsInfo? {
+        let trackerCategories = getTrackersByFilter { tracker in tracker.id == trackerId }
+        guard trackerCategories.isEmpty == false,
+            let currentCategory = trackerCategories.first,
+            let currentTracker = currentCategory.trackers.first else { return nil }
+        
+        let currentTrackerType = currentTracker.day == nil ? TrackerType.irregularEvent : TrackerType.habit
+        let countCompleted = completedTrackers.filter { $0.id == currentTracker.id }.count
+        return TrackerDetailsInfo(
+            categoryName: currentCategory.name,
+            type: currentTrackerType,
+            countCompleted: countCompleted,
+            trackerDetails: currentTracker
+        )
+    }
+    
     func getTrackersByFilter(filter: (Tracker) -> Bool) -> [TrackerCategory] {
         var resultCategories: [TrackerCategory] = []
         categories.forEach { category in
@@ -59,8 +119,32 @@ final class TrackersRepository {
         return resultCategories
     }
     
+    func getTrackerCategoriesByFilter(filter: (TrackerCategory) -> Bool) -> [TrackerCategory] {
+        var resultCategories: [TrackerCategory] = []
+        categories.forEach { category in
+            if filter(category) {
+                resultCategories.append(category)
+            }
+        }
+        return resultCategories
+    }
+    
+    func addRandomTrackerRecords(tracker: Tracker, count: Int) {
+        for _ in 1...count {
+            addTrackerRecord(trackerRecord: TrackerRecord(id: tracker.id, date: Date.random()))
+        }
+    }
+    
     func addTrackerRecord(trackerRecord: TrackerRecord) {
         trackerRecordStore.addTrackerRecord(trackerRecord: trackerRecord)
+    }
+    
+    func deleteTrackerRecords(tracker: Tracker, count: Int) {
+        for _ in 1...count {
+            if let trackerRecord = completedTrackers.first(where: { $0.id == tracker.id }) {
+                deleteTrackerRecord(trackerRecord: trackerRecord)
+            }
+        }
     }
     
     func deleteTrackerRecord(trackerRecord: TrackerRecord) {

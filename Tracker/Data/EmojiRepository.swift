@@ -15,4 +15,9 @@ final class EmojiRepository {
     ]
     
     private init() { }
+    
+    
+    func findEmojiIndex(emoji: String) -> Int? {
+        return currentEmojies.firstIndex(of: emoji)
+    }
 }

@@ -13,7 +13,7 @@ final class TrackerConfigCell : UIView {
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 17)
-        titleLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        titleLabel.textColor = UIColor.dsColor(dsColor: DSColor.black)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
     }()
@@ -64,7 +64,7 @@ final class TrackerConfigCell : UIView {
         layer.masksToBounds = true
         layer.cornerRadius = 16
         clipsToBounds = true
-        backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBackground)
+        backgroundColor = UIColor.dsColor(dsColor: DSColor.background)
         
         labelStackView.addArrangedSubview(titleLabel)
         addSubview(labelStackView)

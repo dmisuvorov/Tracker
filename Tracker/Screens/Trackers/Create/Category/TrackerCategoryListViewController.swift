@@ -35,9 +35,9 @@ final class TrackerCategoryListViewController: UIViewController {
     
     private lazy var addButton: UIButton = {
         let addButton = UIButton()
-        addButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
-        addButton.setTitle("Добавить категорию", for: UIControl.State.normal)
-        addButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.dayWhite), for: UIControl.State.normal)
+        addButton.backgroundColor = UIColor.dsColor(dsColor: DSColor.black)
+        addButton.setTitle("add_category".localized, for: UIControl.State.normal)
+        addButton.setTitleColor(UIColor.dsColor(dsColor: DSColor.white), for: UIControl.State.normal)
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         addButton.layer.cornerRadius = 16
         addButton.addTarget(self, action: #selector(onCreateCategoryButtonClick), for: .touchUpInside)
@@ -90,7 +90,7 @@ final class TrackerCategoryListViewController: UIViewController {
         viewModel.$selectedCategory.bind { [weak self] selectedCategory in
             guard let selectedCategory = selectedCategory else { return }
             
-            self?.trackerCategoryDelegate?.onSelectCategory(selectedCategory: selectedCategory)
+            self?.trackerCategoryDelegate?.onSelectCategory(selectedCategory: selectedCategory.name)
             self?.navigationController?.popViewController(animated: true)
         }
         
@@ -98,9 +98,9 @@ final class TrackerCategoryListViewController: UIViewController {
     }
     
     private func configureUI() {
-        title = "Категория"
+        title = "category".localized
         navigationItem.hidesBackButton = true
-        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.dayWhite)
+        view.backgroundColor = UIColor.dsColor(dsColor: DSColor.white)
         view.addSubview(categoryList)
         view.addSubview(addButton)
         view.addSubview(emptyCategoriesPlaceholderView)

@@ -12,7 +12,7 @@ final class CategoryTrackerViewCell: UICollectionReusableView {
     
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
-        nameLabel.textColor = UIColor.dsColor(dsColor: DSColor.dayBlack)
+        nameLabel.textColor = UIColor.dsColor(dsColor: DSColor.black)
         nameLabel.font = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.bold)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameLabel
